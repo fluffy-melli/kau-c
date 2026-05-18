@@ -2,12 +2,10 @@ cmake_minimum_required(VERSION 3.11)
 
 project(kau C CXX)
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 20)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-
-add_compile_options("/utf-8")
+set(
+    CMAKE_RUNTIME_OUTPUT_DIRECTORY
+    ${CMAKE_SOURCE_DIR}/bin
+)
 
 include(FetchContent)
 
@@ -19,12 +17,115 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(raylib)
 
-set(WITH_IPP OFF CACHE BOOL "" FORCE)
-set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(BUILD_PERF_TESTS OFF CACHE BOOL "" FORCE)
-set(BUILD_opencv_tests OFF CACHE BOOL "" FORCE)
+set(
+    OPENCV_BUILD_LIST
+    "core, imgproc, videoio"
+)
 
-set(BUILD_LIST core, imgproc, videoio CACHE STRING "" FORCE)
+set(
+    BUILD_LIST ${OPENCV_BUILD_LIST}
+    CACHE STRING "" FORCE
+)
+
+set(
+    BUILD_SHARED_LIBS OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    BUILD_TESTS OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    BUILD_PERF_TESTS OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    BUILD_EXAMPLES OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    WITH_WEBP OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    WITH_JPEG OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    WITH_PNG OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    WITH_TIFF OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    WITH_OPENEXR OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    CPU_BASELINE NONE
+    CACHE STRING "" FORCE
+)
+
+set(
+    CPU_DISPATCH ""
+    CACHE STRING "" FORCE
+)
+
+set(
+    ENABLE_SSE OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    ENABLE_SSE2 OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    ENABLE_SSE3 OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    ENABLE_SSSE3 OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    ENABLE_SSE41 OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    ENABLE_SSE42 OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    ENABLE_AVX OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    ENABLE_AVX2 OFF
+    CACHE BOOL "" FORCE
+)
+
+set(
+    WITH_IPP OFF
+    CACHE BOOL "" FORCE
+)
 
 FetchContent_Declare(
     opencv

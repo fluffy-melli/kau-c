@@ -3,9 +3,11 @@
     "configurePresets": [
         {
             "name": "windows-x64_64",
-            "generator": "Visual Studio 18 2026",
-            "binaryDir": "build",
+            "generator": "Ninja",
+            "binaryDir": "build/windows-x64_64",
+            "toolchainFile": "cmake/toolchains/windows-x64_64.cmake",
             "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDLL"
             }
         }
@@ -13,7 +15,6 @@
     "buildPresets": [
         {
             "name": "windows-x64_64",
-            "configuration": "Release",
             "configurePreset": "windows-x64_64"
         }
     ]
