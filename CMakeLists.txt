@@ -147,7 +147,6 @@ target_include_directories(
     ${opencv_SOURCE_DIR}/modules/videoio/include
     ${opencv_SOURCE_DIR}/modules/imgcodecs/include
     ${opencv_SOURCE_DIR}/include
-    ${opencv_BINARY_DIR}
     ${CMAKE_BINARY_DIR}
 )
 
