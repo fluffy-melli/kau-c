@@ -1,5 +1,4 @@
 #include "layout/lane.h"
-#include "constant/lane.h"
 
 #include <raylib.h>
 
@@ -13,7 +12,7 @@ void LaneLineRender(int laneCount) {
     float noteHeight = (float) screenHeight * LANE_NOTE_HEIGHT;
 
     float fieldWidth = (float) noteWidth * laneCount;
-    float fieldXPos = ((float) screenWidth - fieldWidth) * LANE_CENTER;
+    float fieldXPos = ((float) screenWidth - fieldWidth) * LANE_CENTER_X;
 
     float judgmentYPos = (float) screenHeight - ((float) screenHeight * LANE_JUDGEMENT_Y);
 
@@ -65,7 +64,7 @@ void LaneKeyPressRender(int laneCount) {
     float noteWidth = (float) screenWidth * LANE_NOTE_WIDTH;
 
     float fieldWidth = (float) noteWidth * laneCount;
-    float fieldXPos = ((float) screenWidth - fieldWidth) * LANE_CENTER;
+    float fieldXPos = ((float) screenWidth - fieldWidth) * LANE_CENTER_X;
 
     switch (laneCount) {
         case 4:

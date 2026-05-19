@@ -1,12 +1,15 @@
 #include <raylib.h>
 #include "layout/lane.h"
+#include "layout/debug.h"
 #include "video/player.h"
 
 int main() {
-    InitAudioDevice();
-    InitWindow(1280, 720, "kau");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
-    SetWindowState(FLAG_VSYNC_HINT);
+    InitWindow(1280, 720, "kau");
+    InitAudioDevice();
+
+    SetTargetFPS(60);
 
     Font font = LoadFont("resources/NotoSansKR-Bold.ttf");
     Music music = LoadMusicStream("resources/audio.mp3");
@@ -23,6 +26,8 @@ int main() {
 
         LaneLineRender(4);
         LaneKeyPressRender(4);
+
+        DebugInfoRender(font);
 
         EndDrawing();
     }
