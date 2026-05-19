@@ -138,6 +138,7 @@ FetchContent_MakeAvailable(opencv)
 add_executable(
     ${PROJECT_NAME}
     src/main.c
+    src/layout/lane.c
     src/video/player.cpp
 )
 

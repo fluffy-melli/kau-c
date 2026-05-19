@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,6 +12,4 @@ void CloseVideo(VideoPlayer* player);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,9 +1,12 @@
 #include <raylib.h>
+#include "layout/lane.h"
 #include "video/player.h"
 
 int main() {
     InitAudioDevice();
-    InitWindow(1280, 720, "raylib");
+    InitWindow(1280, 720, "kau");
+
+    SetWindowState(FLAG_VSYNC_HINT);
 
     Font font = LoadFont("resources/NotoSansKR-Bold.ttf");
     Music music = LoadMusicStream("resources/audio.mp3");
@@ -17,6 +20,9 @@ int main() {
 
         UpdateMusicStream(music);
         RenderVideo(player, GetMusicTimePlayed(music));
+
+        LaneLineRender(4);
+        LaneKeyPressRender(4);
 
         EndDrawing();
     }
