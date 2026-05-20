@@ -58,11 +58,6 @@ set(
 )
 
 set(
-    WITH_PNG OFF
-    CACHE BOOL "" FORCE
-)
-
-set(
     WITH_TIFF OFF
     CACHE BOOL "" FORCE
 )
@@ -139,8 +134,7 @@ add_executable(
     ${PROJECT_NAME}
     src/main.c
     src/layout/lane.c
-    src/layout/debug.cpp
-    src/video/player.cpp
+    src/layout/video.cpp
 )
 
 target_include_directories(

@@ -1,40 +1,44 @@
 #include <raylib.h>
 #include "layout/lane.h"
-#include "layout/debug.h"
-#include "video/player.h"
+#include "layout/video.h"
+#include "constant/file.h"
 
 int main() {
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 
     InitWindow(1280, 720, "kau");
     InitAudioDevice();
 
-    SetTargetFPS(60);
+    Font font = LoadFont("resources/font/NotoSansKR-Bold.ttf");
 
-    Font font = LoadFont("resources/NotoSansKR-Bold.ttf");
-    Music music = LoadMusicStream("resources/audio.mp3");
-    VideoPlayer* player = OpenVideo("resources/video.mp4");
+    int uid = 0;
 
-    PlayMusicStream(music);
+    VideoPlayer* player = OpenVideo(uid);
+    Music audio = LoadMusicStream(TextFormat(PLAY_AUDIO_PATH, uid));
+    audio.looping = 0;
+
+    PlayMusicStream(audio);
+    SetMusicVolume(audio, 0.3f);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(BLACK);
 
-        UpdateMusicStream(music);
-        RenderVideo(player, GetMusicTimePlayed(music));
+        UpdateMusicStream(audio);
+
+        float elapsed = GetMusicTimePlayed(audio);
+
+        VideoImageRender(player, elapsed);
 
         LaneLineRender(4);
         LaneKeyPressRender(4);
 
-        DebugInfoRender(font);
+        VideoProgressRender(player, elapsed);
 
         EndDrawing();
     }
 
     UnloadFont(font);
-    UnloadMusicStream(music);
-
     CloseVideo(player);
 
     CloseAudioDevice();

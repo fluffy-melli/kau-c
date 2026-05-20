@@ -1,6 +1,7 @@
 #include "layout/lane.h"
 
 #include <raylib.h>
+#include "constant/lane.h"
 
 void LaneLineRender(int laneCount) {
     int screenWidth = GetScreenWidth();

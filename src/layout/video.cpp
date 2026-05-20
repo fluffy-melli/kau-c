@@ -1,7 +1,9 @@
-#include "video/player.h"
+#include "layout/video.h"
 
 #include <raylib.h>
 #include <opencv2/opencv.hpp>
+#include "constant/file.h"
+#include "constant/video.h"
 
 struct VideoPlayer {
     float fps;
@@ -20,10 +22,12 @@ struct VideoPlayer {
 };
 
 extern "C" {
-    VideoPlayer* OpenVideo(const char* path) {
+    VideoPlayer* OpenVideo(int uid) {
         VideoPlayer* player = new VideoPlayer;
 
-        if (!player->cap.open(path)) {
+        std::string video_path = TextFormat(PLAY_VIDEO_PATH, uid);
+
+        if (!player->cap.open(video_path)) {
             delete player;
             return nullptr;
         }
@@ -63,12 +67,55 @@ extern "C" {
         return player;
     }
 
-    int RenderVideo(VideoPlayer* player, float elapsed) {
+    void CloseVideo(VideoPlayer* player) {
+        if (!player) {
+            return;
+        }
+
+        UnloadTexture(player->texture);
+        player->cap.release();
+
+        delete player;
+    }
+
+    int VideoProgressRender(VideoPlayer* player, float elapsed) {
         if (!player || !player->cap.isOpened()) {
             return -1;
         }
 
-        int target_frame = (int)(elapsed * player->fps);
+        float length = VideoLength(player);
+
+        int screenWidth = GetScreenWidth();
+        int screenHeight = GetScreenHeight();
+
+        float progressWidth = screenWidth / length * elapsed;
+        float progressHeight = (float) screenHeight * VIDEO_PREGRESS_HEIGHT;
+
+        DrawRectangle(
+            0,
+            0,
+            screenWidth,
+            (int) progressHeight,
+            VIDEO_PREGRESS_BACKGROUND_COLOR
+        );
+
+        DrawRectangle(
+            0,
+            0,
+            (int) progressWidth,
+            (int) progressHeight,
+            VIDEO_PREGRESS_COLOR
+        );
+
+        return 0;
+    }
+
+    int VideoImageRender(VideoPlayer* player, float elapsed) {
+        if (!player || !player->cap.isOpened()) {
+            return -1;
+        }
+
+        int target_frame = (int) (elapsed * player->fps);
 
         if (target_frame != player->current_frame) {
 
@@ -120,18 +167,25 @@ extern "C" {
             },
             Vector2{0, 0},
             0.0f,
-            WHITE
+            VIDEO_BACKGROUND_COLOR
         );
 
         return 0;
     }
 
-    void CloseVideo(VideoPlayer* player) {
-        if (!player) return;
+    float VideoLength(VideoPlayer* player) {
+        if (!player || !player->cap.isOpened()) {
+            return -1;
+        }
 
-        UnloadTexture(player->texture);
-        player->cap.release();
+        double frame_count = player->cap.get(cv::CAP_PROP_FRAME_COUNT);
+        double fps = player->cap.get(cv::CAP_PROP_FPS);
 
-        delete player;
+        float length = 0.0;
+        if (fps > 0) {
+            length = frame_count / fps;
+        }
+
+        return length;
     }
 }
