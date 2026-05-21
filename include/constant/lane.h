@@ -2,8 +2,6 @@
 
 #include <raylib.h>
 
-#define LANE_CENTER_X  0.50000f // 0.0f ~ 1.0f
-
 #define LANE_LINE_WIDTH 0.00468f // 1280: 6px
 
 #define LANE_NOTE_WIDTH  0.05625f // 1280: 74px
@@ -21,3 +19,17 @@
 #define LANE_4K_2 KEY_S // s
 #define LANE_4K_3 KEY_K // k
 #define LANE_4K_4 KEY_L // l
+
+#define LANE_5K_1 KEY_A // a
+#define LANE_5K_2 KEY_S // s
+#define LANE_5K_3 KEY_D // d
+#define LANE_5K_4 KEY_J // j
+#define LANE_5K_5 KEY_K // k
+#define LANE_5K_6 KEY_L // l
+
+#define LANE_6K_1 KEY_A // a
+#define LANE_6K_2 KEY_S // s
+#define LANE_6K_3 KEY_D // d
+#define LANE_6K_4 KEY_J // j
+#define LANE_6K_5 KEY_K // k
+#define LANE_6K_6 KEY_L // l

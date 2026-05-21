@@ -134,6 +134,7 @@ add_executable(
     ${PROJECT_NAME}
     src/main.c
     src/layout/lane.c
+    src/layout/info.c
     src/layout/video.cpp
 )
 

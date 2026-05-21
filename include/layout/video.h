@@ -5,7 +5,7 @@ extern "C" {
 #endif
 
 typedef struct VideoPlayer VideoPlayer;
-VideoPlayer* OpenVideo(int uid);
+VideoPlayer* OpenVideo(const char *video_path);
 void CloseVideo(VideoPlayer* player);
 
 int VideoProgressRender(VideoPlayer* player, float elapsed);

@@ -2,7 +2,6 @@
 
 #include <raylib.h>
 #include <opencv2/opencv.hpp>
-#include "constant/file.h"
 #include "constant/video.h"
 
 struct VideoPlayer {
@@ -22,10 +21,8 @@ struct VideoPlayer {
 };
 
 extern "C" {
-    VideoPlayer* OpenVideo(int uid) {
+    VideoPlayer* OpenVideo(const char *video_path) {
         VideoPlayer* player = new VideoPlayer;
-
-        std::string video_path = TextFormat(PLAY_VIDEO_PATH, uid);
 
         if (!player->cap.open(video_path)) {
             delete player;
