@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.11)
 
+set(CMAKE_POLICY_DEFAULT_CMP0146 NEW)
+set(CMAKE_POLICY_DEFAULT_CMP0148 NEW)
+
 project(kau C CXX)
 
 set(
@@ -130,9 +133,18 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(opencv)
 
+FetchContent_Declare(
+    glaze
+    GIT_REPOSITORY https://github.com/stephenberry/glaze.git
+    GIT_TAG v7.7.0
+)
+
+FetchContent_MakeAvailable(glaze)
+
 add_executable(
     ${PROJECT_NAME}
     src/main.c
+    src/stage/info.cpp
     src/layout/lane.c
     src/layout/info.c
     src/layout/video.cpp
@@ -159,6 +171,7 @@ target_link_libraries(
     opencv_core
     opencv_imgproc
     opencv_videoio
+    glaze::glaze
 )
 
 add_custom_command(

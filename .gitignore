@@ -1,5 +1,3 @@
 bin
 build
-*.mp3
-*.mp4
-*.png
+resources/stage

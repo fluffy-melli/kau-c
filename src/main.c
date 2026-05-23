@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include <raylib.h>
+#include "stage/info.h"
 #include "layout/lane.h"
 #include "layout/info.h"
 #include "layout/video.h"
@@ -13,13 +15,24 @@ int main() {
     Font font = LoadFont("resources/font/NotoSansKR-Bold.ttf");
     SetTextureFilter(font.texture, TEXTURE_FILTER_TRILINEAR);
 
-    int uid = 0;
+    int stage_id = 0;
     int laneCount = 4;
 
-    VideoPlayer* player = OpenVideo(TextFormat(PLAY_VIDEO_PATH, uid));
-    Music audio = LoadMusicStream(TextFormat(PLAY_AUDIO_PATH, uid));
+    StageInfoJSON* stage_info = OpenStageInfo(TextFormat(FILE_STAGE_PATH, stage_id));
+
+    const char* resources_path = TextFormat(FILE_STAGE_RESOURCES_PATH, stage_id);
+
+    const char* audio_path = TextFormat("%s/%s", resources_path, StageInfoGetAudioPath(stage_info));
+    const char* video_path = TextFormat("%s/%s", resources_path, StageInfoGetVideoPath(stage_info));
+    const char* preview_path = TextFormat("%s/%s", resources_path, StageInfoGetPreviewPath(stage_info));
+
+    const char* title = StageInfoGetTitle(stage_info);
+    const char* artist = StageInfoGetArtist(stage_info);
+    
+    Info* info = LoadInfo(preview_path, title, artist);
+    Music audio = LoadMusicStream(audio_path);
     audio.looping = 0;
-    Info* info = LoadInfo(TextFormat(PLAY_PREIMAGE_PATH, uid), "", "");
+    VideoPlayer* player = OpenVideo(video_path);
 
     HideCursor();
     PlayMusicStream(audio);
@@ -63,6 +76,7 @@ int main() {
     UnloadFont(font);
     CloseInfo(info);
     CloseVideo(player);
+    CloseStageInfo(stage_info);
     UnloadMusicStream(audio);
 
     CloseAudioDevice();

@@ -1,5 +1,4 @@
 #pragma once
 
-#define PLAY_AUDIO_PATH "resources/play/%d/audio.mp3"
-#define PLAY_VIDEO_PATH "resources/play/%d/video.mp4"
-#define PLAY_PREIMAGE_PATH "resources/play/%d/preview.png"
+#define FILE_STAGE_PATH "resources/stage/%d/info.json"
+#define FILE_STAGE_RESOURCES_PATH "resources/stage/%d/resources"

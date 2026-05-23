@@ -8,7 +8,8 @@
             "toolchainFile": "cmake/toolchains/windows-x86_64.cmake",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDLL"
+                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDLL",
+                "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
             }
         }
     ],
