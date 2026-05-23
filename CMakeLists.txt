@@ -149,6 +149,7 @@ add_executable(
     src/layout/info.c
     src/layout/video.cpp
     src/layout/string.c
+    src/layout/score.c
 )
 
 target_include_directories(

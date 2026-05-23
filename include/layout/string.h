@@ -23,6 +23,8 @@ Font SelectFont(Fonts* fonts, FontTypes type);
 
 void DrawString(Fonts* fonts, FontTypes type, const char* text, int x, int y, int spacing, int fontSize, Color color);
 void DrawStringAtCenter(Fonts* fonts, FontTypes type, const char* text, int x, int y, int spacing, int fontSize, Color color);
+void DrawStringAtRight(Fonts* fonts, FontTypes type, const char* text, int x, int y, int spacing, int fontSize, Color color);
 
 void DrawOutline(Fonts* fonts, FontTypes type, const char* text, int x, int y, int outlineSize, int spacing, int fontSize, Color color);
 void DrawOutlineAtCenter(Fonts* fonts, FontTypes type, const char* text, int x, int y, int outlineSize, int spacing, int fontSize, Color color);
+void DrawOutlineAtRight(Fonts* fonts, FontTypes type, const char* text, int x, int y, int outlineSize, int spacing, int fontSize, Color color);

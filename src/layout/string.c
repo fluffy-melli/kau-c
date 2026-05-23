@@ -103,6 +103,35 @@ void DrawStringAtCenter(Fonts* fonts, FontTypes type, const char* text, int x, i
     );
 }
 
+void DrawStringAtRight(Fonts* fonts, FontTypes type, const char* text, int x, int y, int spacing, int fontSize, Color color) {
+    if (!fonts) {
+        return;
+    }
+
+    Font font = SelectFont(fonts, type);
+
+    Vector2 measure = MeasureTextEx(
+        font,
+        text,
+        (float) fontSize,
+        (float) spacing
+    );
+
+    int rightX = x - (int) measure.x;
+
+    DrawTextEx(
+        font,
+        text,
+        (Vector2){
+            (float) rightX,
+            (float) y
+        },
+        (float) fontSize,
+        (float) spacing,
+        color
+    );
+}
+
 void DrawOutline(Fonts* fonts, FontTypes type, const char* text, int x, int y, int outlineSize, int spacing, int fontSize, Color color) {
     if (!fonts) {
         return;
@@ -152,6 +181,35 @@ void DrawOutlineAtCenter(Fonts* fonts, FontTypes type, const char* text, int x, 
         text,
         centerX,
         centerY,
+        outlineSize,
+        spacing,
+        fontSize,
+        color
+    );
+}
+
+void DrawOutlineAtRight(Fonts* fonts, FontTypes type, const char* text, int x, int y, int outlineSize, int spacing, int fontSize, Color color) {
+    if (!fonts) {
+        return;
+    }
+
+    Font font = SelectFont(fonts, type);
+
+    Vector2 measure = MeasureTextEx(
+        font,
+        text,
+        (float) fontSize,
+        (float) spacing
+    );
+
+    int rightX = x - (int) measure.x;
+
+    DrawOutline(
+        fonts,
+        type,
+        text,
+        rightX,
+        y,
         outlineSize,
         spacing,
         fontSize,

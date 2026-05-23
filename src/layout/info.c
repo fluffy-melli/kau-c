@@ -59,6 +59,8 @@ int InfoRender(Info* info, Fonts* fonts, int laneCount) {
     int imageXPos = infoXPos + padding;
     int imageYPos = infoYPos + padding;
 
+    int enterY = screenHeight * INFO_ENTER_Y;
+
     DrawTexturePro(
         info->texture,
         (Rectangle){
@@ -79,20 +81,17 @@ int InfoRender(Info* info, Fonts* fonts, int laneCount) {
     );
 
     int titleFontSize = screenWidth * INFO_TITLE_FONT_SIZE;
-    int artistFontSize = screenWidth * INFO_ARTIST_FONT_SIZE;
-
     int titleSpacing = screenWidth * INFO_TITLE_SPACING;
-    int artistSpacing = screenWidth * INFO_ARTIST_SPACING;
 
-    int textXPos = imageXPos + imageSize + padding;
-    int textYPos = imageYPos;
+    int textXPos = imageXPos + imageSize + padding + 10;
+    int textYPos = imageYPos + 5;
 
     DrawOutline(
         fonts,
         FONT_EXTRA_BOLD,
         info->title,
-        textXPos + 10,
-        textYPos + 5,
+        textXPos,
+        textYPos,
         2,
         titleSpacing,
         titleFontSize,
@@ -103,19 +102,24 @@ int InfoRender(Info* info, Fonts* fonts, int laneCount) {
         fonts,
         FONT_EXTRA_BOLD,
         info->title,
-        textXPos + 10,
-        textYPos + 5,
+        textXPos,
+        textYPos,
         titleSpacing,
         titleFontSize,
         INFO_TITLE_COLOR
     );
 
+    int artistFontSize = screenWidth * INFO_ARTIST_FONT_SIZE;
+    int artistSpacing = screenWidth * INFO_ARTIST_SPACING;
+
+    textYPos += titleFontSize + titleSpacing + enterY;
+
     DrawOutline(
         fonts,
         FONT_BOLD,
         info->artist,
-        textXPos + 10,
-        textYPos + titleFontSize + artistSpacing + 7,
+        textXPos,
+        textYPos,
         2,
         artistSpacing,
         artistFontSize,
@@ -126,8 +130,8 @@ int InfoRender(Info* info, Fonts* fonts, int laneCount) {
         fonts,
         FONT_BOLD,
         info->artist,
-        textXPos + 10,
-        textYPos + titleFontSize + artistSpacing + 7,
+        textXPos,
+        textYPos,
         artistSpacing,
         artistFontSize,
         INFO_ARTIST_COLOR

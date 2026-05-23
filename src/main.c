@@ -4,6 +4,7 @@
 #include "layout/lane.h"
 #include "layout/info.h"
 #include "layout/video.h"
+#include "layout/score.h"
 #include "layout/string.h"
 #include "constant/file.h"
 
@@ -19,6 +20,8 @@ int main() {
         FILE_FONT_BOLD_PATH,
         FILE_FONT_EXTRA_BOLD_PATH
     );
+
+    Score* score = NewScore();
 
     int stage_id = 0;
     int laneCount = 4;
@@ -74,6 +77,7 @@ int main() {
 
         VideoProgressRender(player, elapsed);
         InfoRender(info, fonts, laneCount);
+        ScoreRender(score, fonts);
 
         EndDrawing();
     }
