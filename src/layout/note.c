@@ -57,6 +57,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, int laneCount, float 
             score->userLoss += VERDICT_IGNORE_SECONDS;
             score->lastElapsed = elapsed;
             score->lastLossSecond = VERDICT_IGNORE_SECONDS + 9999.0f;
+            score->currentCombo = 0;
             ShortNoteListRemove(list, i);
             i--;
             continue;
@@ -223,6 +224,15 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, int laneCount
             continue;
         }
 
+        if (fabsf(time) <= VERDICT_COMBO_SECONDS) {
+            score->currentCombo++;
+            if (score->currentCombo > score->maxCombo) {
+                score->maxCombo = score->currentCombo;
+            }
+        } else {
+            score->currentCombo = 0;
+        }
+
         ShortNoteListRemove(list, i);
         i--;
 
@@ -231,6 +241,8 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, int laneCount
 
         score->totalLoss += VERDICT_IGNORE_SECONDS;
         score->userLoss += fabsf(time);
+
+        score->score += (int) ((VERDICT_IGNORE_SECONDS - fabsf(time)) * 1000.0f) / DROP_SPEED_SECONDS;
     }
 
     return 0;

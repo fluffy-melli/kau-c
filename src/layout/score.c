@@ -15,6 +15,11 @@ Score* NewScore() {
         return NULL;
     }
 
+    score->maxCombo = 0;
+    score->currentCombo = 0;
+
+    score->score = 0;
+
     score->totalLoss = 0.0f;
     score->userLoss = 0.0f;
 
@@ -69,64 +74,166 @@ int ScoreRender(Score* score, Fonts* fonts) {
         SCORE_BACKGROUND_COLOR
     );
 
-    int tlFontSize = screenHeight * SCORE_TL_FONT_SIZE;
-    int tlSpacing = screenHeight * SCORE_TL_SPACING;
-
     int textXPos = scoreXPos + 30;
     int textXRightPos = scoreXPos + scoreWidth - 30;
 
     int textYPos = scoreYPos + 20;
 
+    int scoreFontSize = screenHeight * SCORE_SCORE_FONT_SIZE;
+    int scoreSpacing = screenHeight * SCORE_SCORE_SPACING;
+
     DrawOutline(
         fonts,
         FONT_EXTRA_BOLD,
-        "Total Loss",
+        "Score",
         textXPos,
         textYPos,
         2,
-        tlSpacing,
-        tlFontSize,
-        SCORE_TL_OUTLINE_COLOR
+        scoreSpacing,
+        scoreFontSize,
+        SCORE_SCORE_OUTLINE_COLOR
     );
 
     DrawString(
         fonts,
         FONT_EXTRA_BOLD,
-        "Total Loss",
+        "Score",
         textXPos,
         textYPos,
-        tlSpacing,
-        tlFontSize,
-        SCORE_TL_COLOR
+        scoreSpacing,
+        scoreFontSize,
+        SCORE_SCORE_COLOR
     );
 
     DrawOutlineAtRight(
         fonts,
         FONT_EXTRA_BOLD,
-        TextFormat("%dms", (int)(score->userLoss * 1000.0f)),
+        TextFormat("%d", score->score),
         textXRightPos,
         textYPos,
         2,
-        tlSpacing,
-        tlFontSize,
+        scoreSpacing,
+        scoreFontSize,
         SCORE_NUMBER_OUTLINE_COLOR
     );
 
     DrawStringAtRight(
         fonts,
         FONT_EXTRA_BOLD,
-        TextFormat("%dms", (int)(score->userLoss * 1000.0f)),
+        TextFormat("%d", score->score),
         textXRightPos,
         textYPos,
-        tlSpacing,
-        tlFontSize,
+        scoreSpacing,
+        scoreFontSize,
+        SCORE_NUMBER_COLOR
+    );
+
+    int comboFontSize = screenHeight * SCORE_COMBO_FONT_SIZE;
+    int comboSpacing = screenHeight * SCORE_COMBO_SPACING;
+
+    textYPos += scoreFontSize + enterY;
+
+    DrawOutline(
+        fonts,
+        FONT_EXTRA_BOLD,
+        "Combo",
+        textXPos,
+        textYPos,
+        2,
+        comboSpacing,
+        comboFontSize,
+        SCORE_COMBO_OUTLINE_COLOR
+    );
+
+    DrawString(
+        fonts,
+        FONT_EXTRA_BOLD,
+        "Combo",
+        textXPos,
+        textYPos,
+        comboSpacing,
+        comboFontSize,
+        SCORE_COMBO_COLOR
+    );
+
+    DrawOutlineAtRight(
+        fonts,
+        FONT_EXTRA_BOLD,
+        TextFormat("%d", score->currentCombo),
+        textXRightPos,
+        textYPos,
+        2,
+        comboSpacing,
+        comboFontSize,
+        SCORE_NUMBER_OUTLINE_COLOR
+    );
+
+    DrawStringAtRight(
+        fonts,
+        FONT_EXTRA_BOLD,
+        TextFormat("%d", score->currentCombo),
+        textXRightPos,
+        textYPos,
+        comboSpacing,
+        comboFontSize,
+        SCORE_NUMBER_COLOR
+    );
+
+    int maxComboFontSize = screenHeight * SCORE_MAXCOMBO_FONT_SIZE;
+    int maxComboSpacing = screenHeight * SCORE_MAXCOMBO_SPACING;
+
+    textYPos += comboFontSize + enterY;
+
+    DrawOutline(
+        fonts,
+        FONT_EXTRA_BOLD,
+        "Max Combo",
+        textXPos,
+        textYPos,
+        2,
+        maxComboSpacing,
+        maxComboFontSize,
+        SCORE_MAXCOMBO_OUTLINE_COLOR
+    );
+
+    DrawString(
+        fonts,
+        FONT_EXTRA_BOLD,
+        "Max Combo",
+        textXPos,
+        textYPos,
+        maxComboSpacing,
+        maxComboFontSize,
+        SCORE_MAXCOMBO_COLOR
+    );
+
+    DrawOutlineAtRight(
+        fonts,
+        FONT_EXTRA_BOLD,
+        TextFormat("%d", score->maxCombo),
+        textXRightPos,
+        textYPos,
+        2,
+        maxComboSpacing,
+        maxComboFontSize,
+        SCORE_NUMBER_OUTLINE_COLOR
+    );
+
+    DrawStringAtRight(
+        fonts,
+        FONT_EXTRA_BOLD,
+        TextFormat("%d", score->maxCombo),
+        textXRightPos,
+        textYPos,
+        maxComboSpacing,
+        maxComboFontSize,
         SCORE_NUMBER_COLOR
     );
 
     int accFontSize = screenHeight * SCORE_ACC_FONT_SIZE;
     int accSpacing = screenHeight * SCORE_ACC_SPACING;
 
-    textYPos += tlFontSize + enterY;
+    textYPos += maxComboFontSize + enterY;
 
     DrawOutline(
         fonts,
@@ -181,6 +288,57 @@ int ScoreRender(Score* score, Fonts* fonts) {
         textYPos,
         accSpacing,
         accFontSize,
+        SCORE_NUMBER_COLOR
+    );
+
+    int tlFontSize = screenHeight * SCORE_TL_FONT_SIZE;
+    int tlSpacing = screenHeight * SCORE_TL_SPACING;
+
+    textYPos += accFontSize + enterY;
+
+    DrawOutline(
+        fonts,
+        FONT_EXTRA_BOLD,
+        "Total Loss",
+        textXPos,
+        textYPos,
+        2,
+        tlSpacing,
+        tlFontSize,
+        SCORE_TL_OUTLINE_COLOR
+    );
+
+    DrawString(
+        fonts,
+        FONT_EXTRA_BOLD,
+        "Total Loss",
+        textXPos,
+        textYPos,
+        tlSpacing,
+        tlFontSize,
+        SCORE_TL_COLOR
+    );
+
+    DrawOutlineAtRight(
+        fonts,
+        FONT_EXTRA_BOLD,
+        TextFormat("%dms", (int)(score->userLoss * 1000.0f)),
+        textXRightPos,
+        textYPos,
+        2,
+        tlSpacing,
+        tlFontSize,
+        SCORE_NUMBER_OUTLINE_COLOR
+    );
+
+    DrawStringAtRight(
+        fonts,
+        FONT_EXTRA_BOLD,
+        TextFormat("%dms", (int)(score->userLoss * 1000.0f)),
+        textXRightPos,
+        textYPos,
+        tlSpacing,
+        tlFontSize,
         SCORE_NUMBER_COLOR
     );
     

@@ -3,6 +3,11 @@
 #include "layout/string.h"
 
 typedef struct {
+    int maxCombo;
+    int currentCombo;
+
+    int score;
+
     float totalLoss;
     float userLoss;
 

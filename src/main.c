@@ -79,6 +79,8 @@ int main() {
     HideCursor();
     PlayMusicStream(audio);
     SetMusicVolume(audio, 0.1f);
+
+    float started = GetTime();
     
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -90,7 +92,7 @@ int main() {
 
         UpdateMusicStream(audio);
 
-        float elapsed = GetTime(); //GetMusicTimePlayed(audio);
+        float elapsed = GetTime() - started; //GetMusicTimePlayed(audio);
 
         VideoImageRender(player, elapsed);
 
