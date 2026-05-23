@@ -4,6 +4,7 @@
 #include "layout/lane.h"
 #include "layout/info.h"
 #include "layout/video.h"
+#include "layout/string.h"
 #include "constant/file.h"
 
 int main() {
@@ -12,8 +13,12 @@ int main() {
     InitWindow(1280, 720, "kau");
     InitAudioDevice();
 
-    Font font = LoadFont("resources/font/NotoSansKR-Bold.ttf");
-    SetTextureFilter(font.texture, TEXTURE_FILTER_TRILINEAR);
+    Fonts* fonts = OpenFonts(
+        FILE_FONT_LIGHT_PATH,
+        FILE_FONT_REGULAR_PATH,
+        FILE_FONT_BOLD_PATH,
+        FILE_FONT_EXTRA_BOLD_PATH
+    );
 
     int stage_id = 0;
     int laneCount = 4;
@@ -64,18 +69,18 @@ int main() {
 
         VideoImageRender(player, elapsed);
 
-        InfoRender(info, font, laneCount);
         LaneLineRender(laneCount);
         LaneKeyPressRender(laneCount);
 
         VideoProgressRender(player, elapsed);
+        InfoRender(info, fonts, laneCount);
 
         EndDrawing();
     }
 
-    UnloadFont(font);
     CloseInfo(info);
     CloseVideo(player);
+    CloseFonts(fonts);
     CloseStageInfo(stage_info);
     UnloadMusicStream(audio);
 

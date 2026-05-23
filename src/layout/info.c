@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <raylib.h>
+#include "layout/string.h"
 #include "constant/info.h"
 
 Info* LoadInfo(const char* image_path, const char* title, const char* artist) {
@@ -29,7 +30,7 @@ void CloseInfo(Info* info) {
     free(info);
 }
 
-int InfoRender(Info* info, Font font, int laneCount) {
+int InfoRender(Info* info, Fonts* fonts, int laneCount) {
     if (!info) {
         return -1;
     }
@@ -37,411 +38,155 @@ int InfoRender(Info* info, Font font, int laneCount) {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    float padding = (float) screenWidth * INFO_IMAGE_PADDING;
+    int padding = screenWidth * INFO_IMAGE_PADDING;
 
-    float imageSize = (float) screenWidth * INFO_IMAGE_SIZE;
+    int imageSize = screenWidth * INFO_IMAGE_SIZE;
 
-    float infoWidth = (float) screenWidth * INFO_WIDTH;
-    float infoHeight = imageSize + padding * 2;
+    int infoWidth = screenWidth * INFO_WIDTH;
+    int infoHeight = imageSize + padding * 2;
 
-    float infoXPos = (float) screenWidth * INFO_GAP;
-    float infoYPos = ((float) screenHeight - infoHeight) * INFO_CENTER_Y;
+    int infoXPos = screenWidth * INFO_GAP;
+    int infoYPos = (screenHeight - infoHeight) * INFO_CENTER_Y;
 
     DrawRectangle(
-        (int) infoXPos,
-        (int) infoYPos,
-        (int) infoWidth,
-        (int) infoHeight,
+        infoXPos,
+        infoYPos,
+        infoWidth,
+        infoHeight,
         INFO_BACKGROUND_COLOR
     );
 
-    float imageXPos = infoXPos + padding;
-    float imageYPos = infoYPos + padding;
+    int imageXPos = infoXPos + padding;
+    int imageYPos = infoYPos + padding;
 
     DrawTexturePro(
         info->texture,
         (Rectangle){
-            0.0f,
-            0.0f,
+            (float) 0,
+            (float) 0,
             (float) info->texture.width,
             (float) info->texture.height
         },
         (Rectangle){
-            imageXPos,
-            imageYPos,
-            imageSize,
-            imageSize
+            (float) imageXPos,
+            (float) imageYPos,
+            (float) imageSize,
+            (float) imageSize
         },
-        (Vector2){0, 0},
-        0.0f,
+        (Vector2){(float) 0, (float) 0},
+        (float) 0,
         WHITE
     );
 
-    float titleFontSize = (float) screenWidth * INFO_TITLE_FONT_SIZE;
-    float artistFontSize = (float) screenWidth * INFO_ARTIST_FONT_SIZE;
+    int titleFontSize = screenWidth * INFO_TITLE_FONT_SIZE;
+    int artistFontSize = screenWidth * INFO_ARTIST_FONT_SIZE;
 
-    float titleSpacing = (float) screenWidth * INFO_TITLE_SPACING;
-    float artistSpacing = (float) screenWidth * INFO_ARTIST_SPACING;
+    int titleSpacing = screenWidth * INFO_TITLE_SPACING;
+    int artistSpacing = screenWidth * INFO_ARTIST_SPACING;
 
-    float textXPos = imageXPos + imageSize + padding;
-    float textYPos = imageYPos;
+    int textXPos = imageXPos + imageSize + padding;
+    int textYPos = imageYPos;
 
-    Vector2 titleTextPos = {
+    DrawOutline(
+        fonts,
+        FONT_EXTRA_BOLD,
+        info->title,
         textXPos + 10,
-        textYPos + 5
-    };
-
-    DrawTextEx(
-        font,
-        info->title,
-        (Vector2){
-            titleTextPos.x - 2,
-            titleTextPos.y
-        },
-        titleFontSize,
+        textYPos + 5,
+        2,
         titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
+        titleFontSize,
+        INFO_TITLE_OUTLINE_COLOR
     );
 
-    DrawTextEx(
-        font,
+    DrawString(
+        fonts,
+        FONT_EXTRA_BOLD,
         info->title,
-        (Vector2){
-            titleTextPos.x + 2,
-            titleTextPos.y
-        },
-        titleFontSize,
+        textXPos + 10,
+        textYPos + 5,
         titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->title,
-        (Vector2){
-            titleTextPos.x,
-            titleTextPos.y - 2
-        },
         titleFontSize,
-        titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
-    );
-    
-    DrawTextEx(
-        font,
-        info->title,
-        (Vector2){
-            titleTextPos.x,
-            titleTextPos.y + 2
-        },
-        titleFontSize,
-        titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->title,
-        (Vector2){
-            titleTextPos.x - 2,
-            titleTextPos.y - 2
-        },
-        titleFontSize,
-        titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->title,
-        (Vector2){
-            titleTextPos.x + 2,
-            titleTextPos.y - 2
-        },
-        titleFontSize,
-        titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->title,
-        (Vector2){
-            titleTextPos.x - 2,
-            titleTextPos.y + 2
-        },
-        titleFontSize,
-        titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->title,
-        (Vector2){
-            titleTextPos.x + 2,
-            titleTextPos.y + 2
-        },
-        titleFontSize,
-        titleSpacing,
-        INFO_TITLE_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->title,
-        titleTextPos,
-        titleFontSize,
-        titleSpacing,
         INFO_TITLE_COLOR
     );
 
-    Vector2 artistTextPos = {
+    DrawOutline(
+        fonts,
+        FONT_BOLD,
+        info->artist,
         textXPos + 10,
-        textYPos + titleFontSize + artistSpacing * 2
-    };
-
-    DrawTextEx(
-        font,
-        info->artist,
-        (Vector2){
-            artistTextPos.x - 2,
-            artistTextPos.y
-        },
-        artistFontSize,
+        textYPos + titleFontSize + artistSpacing + 7,
+        2,
         artistSpacing,
-        INFO_ARTIST_SHADOW_COLOR
+        artistFontSize,
+        INFO_ARTIST_OUTLINE_COLOR
     );
 
-    DrawTextEx(
-        font,
+    DrawString(
+        fonts,
+        FONT_BOLD,
         info->artist,
-        (Vector2){
-            artistTextPos.x,
-            artistTextPos.y - 2
-        },
-        artistFontSize,
+        textXPos + 10,
+        textYPos + titleFontSize + artistSpacing + 7,
         artistSpacing,
-        INFO_ARTIST_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->artist,
-        (Vector2){
-            artistTextPos.x,
-            artistTextPos.y + 2
-        },
         artistFontSize,
-        artistSpacing,
-        INFO_ARTIST_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->artist,
-        (Vector2){
-            artistTextPos.x - 2,
-            artistTextPos.y - 2
-        },
-        artistFontSize,
-        artistSpacing,
-        INFO_ARTIST_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->artist,
-        (Vector2){
-            artistTextPos.x + 2,
-            artistTextPos.y - 2
-        },
-        artistFontSize,
-        artistSpacing,
-        INFO_ARTIST_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->artist,
-        (Vector2){
-            artistTextPos.x - 2,
-            artistTextPos.y + 2
-        },
-        artistFontSize,
-        artistSpacing,
-        INFO_ARTIST_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->artist,
-        (Vector2){
-            artistTextPos.x + 2,
-            artistTextPos.y + 2
-        },
-        artistFontSize,
-        artistSpacing,
-        INFO_ARTIST_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        info->artist,
-        artistTextPos,
-        artistFontSize,
-        artistSpacing,
         INFO_ARTIST_COLOR
     );
 
-    float langCountFontSize = (float) screenWidth * INFO_LANGCOUNT_FONT_SIZE;
-    float langCountSpacing = (float) screenWidth * INFO_LANGCOUNT_SPACING;
+    int langCountFontSize = screenWidth * INFO_LANGCOUNT_FONT_SIZE;
+    int langCountSpacing = screenWidth * INFO_LANGCOUNT_SPACING;
 
-    float langCountWidth = imageSize + padding * 2;
-    float langCountHeight = langCountFontSize + langCountSpacing * 2;
+    int langCountWidth = imageSize + padding * 2;
+    int langCountHeight = langCountFontSize + langCountSpacing * 2;
 
-    float langCountYPos = imageYPos + imageSize + padding - 1;
+    int langCountYPos = imageYPos + imageSize + padding;
 
     DrawRectangle(
-        (int) infoXPos,
-        (int) langCountYPos,
-        (int) langCountWidth,
-        (int) langCountHeight,
+        infoXPos,
+        langCountYPos,
+        langCountWidth,
+        langCountHeight,
         INFO_LANGCOUNT_BACKGROUND_COLOR
     );
 
     DrawTriangle(
         (Vector2){
-            ((int) infoXPos + (int)langCountWidth),
-            (int) langCountYPos
+            (float) (infoXPos + langCountWidth),
+            (float) langCountYPos
         },
         (Vector2){
-            ((int)infoXPos + (int)langCountWidth),
-            (int) (langCountYPos + (int)langCountHeight)
+            (float) (infoXPos + langCountWidth),
+            (float) (langCountYPos + langCountHeight)
         },
         (Vector2){
-            ((int)infoXPos + (int)langCountWidth + (int)langCountHeight),
-            ((int)langCountYPos)
+            (float) (infoXPos + langCountWidth + langCountHeight),
+            (float) langCountYPos
         },
         INFO_LANGCOUNT_BACKGROUND_COLOR
     );
 
-    const char* laneText = TextFormat("%dK", laneCount);
+    const char* laneText = TextFormat("%d Lines", laneCount);
 
-    Vector2 laneTextSize = MeasureTextEx(
-        font,
+    DrawOutlineAtCenter(
+        fonts,
+        FONT_EXTRA_BOLD,
         laneText,
+        infoXPos + imageSize / 2 + padding,
+        langCountYPos + langCountHeight / 2,
+        2,
+        langCountSpacing,
         langCountFontSize,
-        langCountSpacing
+        INFO_LANGCOUNT_OUTLINE_COLOR
     );
 
-    Vector2 laneTextPos = {
-        (infoXPos + imageSize / 2 + padding) - laneTextSize.x / 2.0f,
-        langCountYPos + (langCountHeight - laneTextSize.y) / 2.0f
-    };
-
-    DrawTextEx(
-        font,
+    DrawStringAtCenter(
+        fonts,
+        FONT_EXTRA_BOLD,
         laneText,
-        (Vector2){
-            laneTextPos.x - 2,
-            laneTextPos.y
-        },
-        langCountFontSize,
+        infoXPos + imageSize / 2 + padding,
+        langCountYPos + langCountHeight / 2,
         langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-    
-    DrawTextEx(
-        font,
-        laneText,
-        (Vector2){
-            laneTextPos.x + 2,
-            laneTextPos.y
-        },
         langCountFontSize,
-        langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        laneText,
-        (Vector2){
-            laneTextPos.x,
-            laneTextPos.y - 2
-        },
-        langCountFontSize,
-        langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        laneText,
-        (Vector2){
-            laneTextPos.x,
-            laneTextPos.y + 2
-        },
-        langCountFontSize,
-        langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        laneText,
-        (Vector2){
-            laneTextPos.x - 2,
-            laneTextPos.y - 2
-        },
-        langCountFontSize,
-        langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        laneText,
-        (Vector2){
-            laneTextPos.x + 2,
-            laneTextPos.y - 2
-        },
-        langCountFontSize,
-        langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        laneText,
-        (Vector2){
-            laneTextPos.x - 2,
-            laneTextPos.y + 2
-        },
-        langCountFontSize,
-        langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        laneText,
-        (Vector2){
-            laneTextPos.x + 2,
-            laneTextPos.y + 2
-        },
-        langCountFontSize,
-        langCountSpacing,
-        INFO_LANGCOUNT_SHADOW_COLOR
-    );
-
-    DrawTextEx(
-        font,
-        laneText,
-        laneTextPos,
-        langCountFontSize,
-        langCountSpacing,
         INFO_LANGCOUNT_COLOR
     );
 

@@ -148,6 +148,7 @@ add_executable(
     src/layout/lane.c
     src/layout/info.c
     src/layout/video.cpp
+    src/layout/string.c
 )
 
 target_include_directories(

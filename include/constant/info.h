@@ -13,7 +13,7 @@
 
 #define INFO_TITLE_FONT_SIZE     0.01953f // 1280: 25px
 #define INFO_ARTIST_FONT_SIZE    0.01562f // 1280: 20px
-#define INFO_LANGCOUNT_FONT_SIZE 0.01562f // 1280: 20px
+#define INFO_LANGCOUNT_FONT_SIZE 0.01171f // 1280: 15px
 
 #define INFO_TITLE_SPACING     0.001562f // 1280: 2px
 #define INFO_ARTIST_SPACING    0.001562f // 1280: 2px
@@ -23,9 +23,9 @@
 #define INFO_ARTIST_COLOR    ((Color) {200, 200, 200, 255})
 #define INFO_LANGCOUNT_COLOR ((Color) {255, 255, 255, 255})
 
-#define INFO_TITLE_SHADOW_COLOR     ((Color) {0, 0, 0, 255})
-#define INFO_ARTIST_SHADOW_COLOR    ((Color) {0, 0, 0, 255})
-#define INFO_LANGCOUNT_SHADOW_COLOR ((Color) {0, 0, 0, 255})
+#define INFO_TITLE_OUTLINE_COLOR     ((Color) {0, 0, 0, 255})
+#define INFO_ARTIST_OUTLINE_COLOR    ((Color) {0, 0, 0, 255})
+#define INFO_LANGCOUNT_OUTLINE_COLOR ((Color) {0, 0, 0, 255})
 
 #define INFO_BACKGROUND_COLOR           ((Color) {185, 238, 132, 255})
 #define INFO_LANGCOUNT_BACKGROUND_COLOR ((Color) {255, 165, 0, 255})
