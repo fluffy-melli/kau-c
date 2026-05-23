@@ -15,11 +15,8 @@ Score* NewScore() {
         return NULL;
     }
 
-    score->perfect = 0;
-    score->great = 0;
-    score->good = 0;
-    score->bad = 0;
-    score->miss = 0;
+    score->totalLoss = 0.0f;
+    score->userLoss = 0.0f;
 
     score->lastElapsed = -999.0f;
     score->lastLossSecond = 0.0f;
@@ -72,8 +69,8 @@ int ScoreRender(Score* score, Fonts* fonts) {
         SCORE_BACKGROUND_COLOR
     );
 
-    int perfectFontSize = screenHeight * SCORE_PERFECT_FONT_SIZE;
-    int perfectSpacing = screenHeight * SCORE_PERFECT_SPACING;
+    int tlFontSize = screenHeight * SCORE_TL_FONT_SIZE;
+    int tlSpacing = screenHeight * SCORE_TL_SPACING;
 
     int textXPos = scoreXPos + 30;
     int textXRightPos = scoreXPos + scoreWidth - 30;
@@ -83,250 +80,107 @@ int ScoreRender(Score* score, Fonts* fonts) {
     DrawOutline(
         fonts,
         FONT_EXTRA_BOLD,
-        "PERFECT",
+        "Total Loss",
         textXPos,
         textYPos,
         2,
-        perfectSpacing,
-        perfectFontSize,
-        SCORE_PERFECT_OUTLINE_COLOR
+        tlSpacing,
+        tlFontSize,
+        SCORE_TL_OUTLINE_COLOR
     );
 
     DrawString(
         fonts,
         FONT_EXTRA_BOLD,
-        "PERFECT",
+        "Total Loss",
         textXPos,
         textYPos,
-        perfectSpacing,
-        perfectFontSize,
-        SCORE_PERFECT_COLOR
+        tlSpacing,
+        tlFontSize,
+        SCORE_TL_COLOR
     );
 
     DrawOutlineAtRight(
         fonts,
         FONT_EXTRA_BOLD,
-        TextFormat("%d", score->perfect),
+        TextFormat("%dms", (int)(score->userLoss * 1000.0f)),
         textXRightPos,
         textYPos,
         2,
-        perfectSpacing,
-        perfectFontSize,
+        tlSpacing,
+        tlFontSize,
         SCORE_NUMBER_OUTLINE_COLOR
     );
 
     DrawStringAtRight(
         fonts,
         FONT_EXTRA_BOLD,
-        TextFormat("%d", score->perfect),
+        TextFormat("%dms", (int)(score->userLoss * 1000.0f)),
         textXRightPos,
         textYPos,
-        perfectSpacing,
-        perfectFontSize,
+        tlSpacing,
+        tlFontSize,
         SCORE_NUMBER_COLOR
     );
 
-    int greatFontSize = screenHeight * SCORE_GREAT_FONT_SIZE;
-    int greatSpacing = screenHeight * SCORE_GREAT_SPACING;
+    int accFontSize = screenHeight * SCORE_ACC_FONT_SIZE;
+    int accSpacing = screenHeight * SCORE_ACC_SPACING;
 
-    textYPos += perfectFontSize + perfectSpacing + enterY;
+    textYPos += tlFontSize + enterY;
 
     DrawOutline(
         fonts,
         FONT_EXTRA_BOLD,
-        "GREAT",
+        "Accuracy",
         textXPos,
         textYPos,
         2,
-        greatSpacing,
-        greatFontSize,
-        SCORE_GREAT_OUTLINE_COLOR
+        accSpacing,
+        accFontSize,
+        SCORE_ACC_OUTLINE_COLOR
     );
 
     DrawString(
         fonts,
         FONT_EXTRA_BOLD,
-        "GREAT",
+        "Accuracy",
         textXPos,
         textYPos,
-        greatSpacing,
-        greatFontSize,
-        SCORE_GREAT_COLOR
+        accSpacing,
+        accFontSize,
+        SCORE_ACC_COLOR
     );
+
+    float accuracy = 0.0f;
+    if (score->totalLoss > 0.0f) {
+        accuracy = ((score->totalLoss - score->userLoss) / score->totalLoss) * 100.0f;
+        if (accuracy < 0.0f) {
+            accuracy = 0.0f;
+        } else if (accuracy > 100.0f) {
+            accuracy = 100.0f;
+        }
+    }
 
     DrawOutlineAtRight(
         fonts,
         FONT_EXTRA_BOLD,
-        TextFormat("%d", score->great),
+        TextFormat("%.2f%%", accuracy),
         textXRightPos,
         textYPos,
         2,
-        greatSpacing,
-        greatFontSize,
+        accSpacing,
+        accFontSize,
         SCORE_NUMBER_OUTLINE_COLOR
     );
 
     DrawStringAtRight(
         fonts,
         FONT_EXTRA_BOLD,
-        TextFormat("%d", score->great),
+        TextFormat("%.2f%%", accuracy),
         textXRightPos,
         textYPos,
-        greatSpacing,
-        greatFontSize,
-        SCORE_NUMBER_COLOR
-    );
-
-    int goodFontSize = screenHeight * SCORE_GOOD_FONT_SIZE;
-    int goodSpacing = screenHeight * SCORE_GOOD_SPACING;
-
-    textYPos += greatFontSize + greatSpacing + enterY;
-
-    DrawOutline(
-        fonts,
-        FONT_EXTRA_BOLD,
-        "GOOD",
-        textXPos,
-        textYPos,
-        2,
-        goodSpacing,
-        goodFontSize,
-        SCORE_GOOD_OUTLINE_COLOR
-    );
-
-    DrawString(
-        fonts,
-        FONT_EXTRA_BOLD,
-        "GOOD",
-        textXPos,
-        textYPos,
-        goodSpacing,
-        goodFontSize,
-        SCORE_GOOD_COLOR
-    );
-
-    DrawOutlineAtRight(
-        fonts,
-        FONT_EXTRA_BOLD,
-        TextFormat("%d", score->good),
-        textXRightPos,
-        textYPos,
-        2,
-        goodSpacing,
-        goodFontSize,
-        SCORE_NUMBER_OUTLINE_COLOR
-    );
-
-    DrawStringAtRight(
-        fonts,
-        FONT_EXTRA_BOLD,
-        TextFormat("%d", score->good),
-        textXRightPos,
-        textYPos,
-        goodSpacing,
-        goodFontSize,
-        SCORE_NUMBER_COLOR
-    );
-
-    int badFontSize = screenHeight * SCORE_BAD_FONT_SIZE;
-    int badSpacing = screenHeight * SCORE_BAD_SPACING;
-
-    textYPos += goodFontSize + goodSpacing + enterY;
-
-    DrawOutline(
-        fonts,
-        FONT_EXTRA_BOLD,
-        "BAD",
-        textXPos,
-        textYPos,
-        2,
-        badSpacing,
-        badFontSize,
-        SCORE_BAD_OUTLINE_COLOR
-    );
-
-    DrawString(
-        fonts,
-        FONT_EXTRA_BOLD,
-        "BAD",
-        textXPos,
-        textYPos,
-        badSpacing,
-        badFontSize,
-        SCORE_BAD_COLOR
-    );
-
-    DrawOutlineAtRight(
-        fonts,
-        FONT_EXTRA_BOLD,
-        TextFormat("%d", score->bad),
-        textXRightPos,
-        textYPos,
-        2,
-        badSpacing,
-        badFontSize,
-        SCORE_NUMBER_OUTLINE_COLOR
-    );
-
-    DrawStringAtRight(
-        fonts,
-        FONT_EXTRA_BOLD,
-        TextFormat("%d", score->bad),
-        textXRightPos,
-        textYPos,
-        badSpacing,
-        badFontSize,
-        SCORE_NUMBER_COLOR
-    );
-
-    int missFontSize = screenHeight * SCORE_MISS_FONT_SIZE;
-    int missSpacing = screenHeight * SCORE_MISS_SPACING;
-
-    textYPos += badFontSize + badSpacing + enterY;
-
-    DrawOutline(
-        fonts,
-        FONT_EXTRA_BOLD,
-        "MISS",
-        textXPos,
-        textYPos,
-        2,
-        missSpacing,
-        missFontSize,
-        SCORE_MISS_OUTLINE_COLOR
-    );
-
-    DrawString(
-        fonts,
-        FONT_EXTRA_BOLD,
-        "MISS",
-        textXPos,
-        textYPos,
-        missSpacing,
-        missFontSize,
-        SCORE_MISS_COLOR
-    );
-
-    DrawOutlineAtRight(
-        fonts,
-        FONT_EXTRA_BOLD,
-        TextFormat("%d", score->miss),
-        textXRightPos,
-        textYPos,
-        2,
-        missSpacing,
-        missFontSize,
-        SCORE_NUMBER_OUTLINE_COLOR
-    );
-
-    DrawStringAtRight(
-        fonts,
-        FONT_EXTRA_BOLD,
-        TextFormat("%d", score->miss),
-        textXRightPos,
-        textYPos,
-        missSpacing,
-        missFontSize,
+        accSpacing,
+        accFontSize,
         SCORE_NUMBER_COLOR
     );
     
@@ -350,292 +204,110 @@ int ScoreRenderAtLane(Score* score, Fonts* fonts, int laneCount, float elapsed) 
     int fieldXPos = lineWidth + infoWidth + infoXPos * 2;
 
     int scoreXPos = fieldXPos + noteWidth * laneCount / 2;
-    int scoreYPos = 400;
+    int scoreYPos = screenHeight - screenHeight * SCORE_SHOW_Y;
 
     float timeDiff = elapsed - score->lastElapsed;
 
-    int perfectFontSize = screenHeight * SCORE_PERFECT_FONT_SIZE;
-    int perfectSpacing = screenHeight * SCORE_PERFECT_SPACING;
-
-    int greatFontSize = screenHeight * SCORE_GREAT_FONT_SIZE;
-    int greatSpacing = screenHeight * SCORE_GREAT_SPACING;
-
-    int goodFontSize = screenHeight * SCORE_GOOD_FONT_SIZE;
-    int goodSpacing = screenHeight * SCORE_GOOD_SPACING;
-
-    int badFontSize = screenHeight * SCORE_BAD_FONT_SIZE;
-    int badSpacing = screenHeight * SCORE_BAD_SPACING;
-
-    int missFontSize = screenHeight * SCORE_MISS_FONT_SIZE;
-    int missSpacing = screenHeight * SCORE_MISS_SPACING;
-
-    int fastFontSize = screenHeight * SCORE_FAST_FONT_SIZE;
-    int fastSpacing = screenHeight * SCORE_FAST_SPACING;
-
-    int slowFontSize = screenHeight * SCORE_SLOW_FONT_SIZE;
-    int slowSpacing = screenHeight * SCORE_SLOW_SPACING;
+    int showFontSize = screenHeight * SCORE_SHOW_FONT_SIZE;
+    int showSpacing = screenHeight * SCORE_SHOW_SPACING;
 
     if (timeDiff >= 0.0f && timeDiff <= 1.0f) {
         float absLossSecond = fabsf(score->lastLossSecond);
 
-        if (absLossSecond <= VERDICT_PERFECT_SECONDS) {
+        if (absLossSecond > VERDICT_IGNORE_SECONDS) {
             DrawOutlineAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "PERFECT",
+                "miss",
                 scoreXPos,
                 scoreYPos,
                 2,
-                perfectSpacing,
-                perfectFontSize,
-                SCORE_PERFECT_OUTLINE_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_OUTLINE_COLOR
             );
 
             DrawStringAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "PERFECT",
+                "miss",
                 scoreXPos,
                 scoreYPos,
-                perfectSpacing,
-                perfectFontSize,
-                SCORE_PERFECT_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_COLOR
             );
-        } else if (absLossSecond <= VERDICT_GREAT_SECONDS) {
+            return 0;
+        }
+
+        if (score->lastLossSecond < -0.0001f && (int)(absLossSecond * 1000.0f) != 0) {
             DrawOutlineAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "GREAT",
+                TextFormat("+%dms", (int)(absLossSecond * 1000.0f)),
                 scoreXPos,
                 scoreYPos,
                 2,
-                greatSpacing,
-                greatFontSize,
-                SCORE_GREAT_OUTLINE_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_OUTLINE_COLOR
             );
 
             DrawStringAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "GREAT",
+                TextFormat("+%dms", (int)(absLossSecond * 1000.0f)),
                 scoreXPos,
                 scoreYPos,
-                greatSpacing,
-                greatFontSize,
-                SCORE_GREAT_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_COLOR
             );
-
-            if (score->lastLossSecond < 0.0f) {
-                DrawOutlineAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "FAST",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    2,
-                    fastSpacing,
-                    fastFontSize,
-                    SCORE_FAST_OUTLINE_COLOR
-                );
-
-                DrawStringAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "FAST",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    fastSpacing,
-                    fastFontSize,
-                    SCORE_FAST_COLOR
-                );
-            } else if (score->lastLossSecond > 0.0f) {
-                DrawOutlineAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "SLOW",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    2,
-                    slowSpacing,
-                    slowFontSize,
-                    SCORE_SLOW_OUTLINE_COLOR
-                );
-
-                DrawStringAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "SLOW",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    slowSpacing,
-                    slowFontSize,
-                    SCORE_SLOW_COLOR
-                );
-            }
-        } else if (absLossSecond <= VERDICT_GOOD_SECONDS) {
+        } else if (score->lastLossSecond > 0.0001f && (int)(absLossSecond * 1000.0f) != 0) {
             DrawOutlineAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "GOOD",
+                TextFormat("-%dms", (int)(absLossSecond * 1000.0f)),
                 scoreXPos,
                 scoreYPos,
                 2,
-                goodSpacing,
-                goodFontSize,
-                SCORE_GOOD_OUTLINE_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_OUTLINE_COLOR
             );
 
             DrawStringAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "GOOD",
+                TextFormat("-%dms", (int)(absLossSecond * 1000.0f)),
                 scoreXPos,
                 scoreYPos,
-                goodSpacing,
-                goodFontSize,
-                SCORE_GOOD_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_COLOR
             );
-
-            if (score->lastLossSecond < 0.0f) {
-                DrawOutlineAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "FAST",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    2,
-                    fastSpacing,
-                    fastFontSize,
-                    SCORE_FAST_OUTLINE_COLOR
-                );
-
-                DrawStringAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "FAST",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    fastSpacing,
-                    fastFontSize,
-                    SCORE_FAST_COLOR
-                );
-            } else if (score->lastLossSecond > 0.0f) {
-                DrawOutlineAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "SLOW",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    2,
-                    slowSpacing,
-                    slowFontSize,
-                    SCORE_SLOW_OUTLINE_COLOR
-                );
-
-                DrawStringAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "SLOW",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    slowSpacing,
-                    slowFontSize,
-                    SCORE_SLOW_COLOR
-                );
-            }
-        } else if (absLossSecond <= VERDICT_IGNORE_SECONDS) {
-            DrawOutlineAtCenter(
-                fonts,
-                FONT_EXTRA_BOLD,
-                "BAD",
-                scoreXPos,
-                scoreYPos,
-                2,
-                badSpacing,
-                badFontSize,
-                SCORE_BAD_OUTLINE_COLOR
-            );
-
-            DrawStringAtCenter(
-                fonts,
-                FONT_EXTRA_BOLD,
-                "BAD",
-                scoreXPos,
-                scoreYPos,
-                badSpacing,
-                badFontSize,
-                SCORE_BAD_COLOR
-            );
-
-            if (score->lastLossSecond < 0.0f) {
-                DrawOutlineAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "FAST",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    2,
-                    fastSpacing,
-                    fastFontSize,
-                    SCORE_FAST_OUTLINE_COLOR
-                );
-
-                DrawStringAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "FAST",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    fastSpacing,
-                    fastFontSize,
-                    SCORE_FAST_COLOR
-                );
-            } else if (score->lastLossSecond > 0.0f) {
-                DrawOutlineAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "SLOW",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    2,
-                    slowSpacing,
-                    slowFontSize,
-                    SCORE_SLOW_OUTLINE_COLOR
-                );
-
-                DrawStringAtCenter(
-                    fonts,
-                    FONT_EXTRA_BOLD,
-                    "SLOW",
-                    scoreXPos,
-                    scoreYPos + greatFontSize + greatSpacing,
-                    slowSpacing,
-                    slowFontSize,
-                    SCORE_SLOW_COLOR
-                );
-            }
         } else {
             DrawOutlineAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "MISS",
+                "0ms",
                 scoreXPos,
                 scoreYPos,
                 2,
-                missSpacing,
-                missFontSize,
-                SCORE_MISS_OUTLINE_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_OUTLINE_COLOR
             );
 
             DrawStringAtCenter(
                 fonts,
                 FONT_EXTRA_BOLD,
-                "MISS",
+                "0ms",
                 scoreXPos,
                 scoreYPos,
-                missSpacing,
-                missFontSize,
-                SCORE_MISS_COLOR
+                showSpacing,
+                showFontSize,
+                SCORE_SHOW_COLOR
             );
         }
     }

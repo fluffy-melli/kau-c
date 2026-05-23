@@ -1,8 +1,8 @@
 #include "layout/note.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include <raylib.h>
-#include <math.h>
 #include "constant/note.h"
 #include "constant/info.h"
 #include "constant/lane.h"
@@ -53,7 +53,8 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, int laneCount, float 
         }
 
         if (yPos > screenHeight) {
-            score->miss++;
+            score->totalLoss += VERDICT_IGNORE_SECONDS;
+            score->userLoss += VERDICT_IGNORE_SECONDS;
             score->lastElapsed = elapsed;
             score->lastLossSecond = VERDICT_IGNORE_SECONDS + 9999.0f;
             ShortNoteListRemove(list, i);
@@ -222,26 +223,14 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, int laneCount
             continue;
         }
 
-        if (fabsf(time) <= VERDICT_PERFECT_SECONDS) {
-            score->perfect++;
-            ShortNoteListRemove(list, i);
-            i--;
-        } else if (fabsf(time) <= VERDICT_GREAT_SECONDS) {
-            score->great++;
-            ShortNoteListRemove(list, i);
-            i--;
-        } else if (fabsf(time) <= VERDICT_GOOD_SECONDS) {
-            score->good++;
-            ShortNoteListRemove(list, i);
-            i--;
-        } else {
-            score->bad++;
-            ShortNoteListRemove(list, i);
-            i--;
-        }
+        ShortNoteListRemove(list, i);
+        i--;
 
         score->lastElapsed = elapsed;
         score->lastLossSecond = time;
+
+        score->totalLoss += VERDICT_IGNORE_SECONDS;
+        score->userLoss += fabsf(time);
     }
 
     return 0;

@@ -194,5 +194,85 @@ int InfoRender(Info* info, Fonts* fonts, int laneCount) {
         INFO_LANGCOUNT_COLOR
     );
 
+    int backgroundOutlineSize = screenWidth * INFO_BACKGROUND_OUTLINE_SIZE;
+
+    DrawLineEx(
+        (Vector2){
+            (float) infoXPos,
+            (float) infoYPos
+        },
+        (Vector2){
+            (float) (infoXPos + infoWidth),
+            (float) infoYPos
+        },
+        backgroundOutlineSize,
+        INFO_LANGCOUNT_OUTLINE_COLOR
+    );
+
+    DrawLineEx(
+        (Vector2){
+            (float) infoXPos,
+            (float) infoYPos
+        },
+        (Vector2){
+            (float) infoXPos,
+            (float) infoYPos + infoHeight + langCountHeight
+        },
+        backgroundOutlineSize,
+        INFO_LANGCOUNT_OUTLINE_COLOR
+    );
+
+    DrawLineEx(
+        (Vector2){
+            (float) infoXPos,
+            (float) infoYPos + infoHeight + langCountHeight
+        },
+        (Vector2){
+            (float) infoXPos + langCountWidth,
+            (float) infoYPos + infoHeight + langCountHeight
+        },
+        backgroundOutlineSize,
+        INFO_LANGCOUNT_OUTLINE_COLOR
+    );
+
+    DrawLineEx(
+        (Vector2){
+            (float) infoXPos + langCountWidth,
+            (float) infoYPos + infoHeight + langCountHeight
+        },
+        (Vector2){
+            (float) infoXPos + langCountWidth + langCountHeight,
+            (float) infoYPos + infoHeight
+        },  
+        backgroundOutlineSize,
+        INFO_LANGCOUNT_OUTLINE_COLOR
+    );
+
+    DrawLineEx(
+        (Vector2){
+            (float) infoXPos + langCountWidth + langCountHeight,
+            (float) infoYPos + infoHeight
+        },
+        (Vector2){
+            (float) infoXPos + infoWidth,
+            (float) infoYPos + infoHeight
+        },
+        backgroundOutlineSize,
+        INFO_LANGCOUNT_OUTLINE_COLOR
+    );
+
+    DrawLineEx(
+        (Vector2){
+            (float) infoXPos + infoWidth,
+            (float) infoYPos + infoHeight
+        },
+        (Vector2){
+            (float) infoXPos + infoWidth,
+            (float) infoYPos
+        },
+        backgroundOutlineSize,
+        INFO_LANGCOUNT_OUTLINE_COLOR
+    );
+
     return 0;
 }

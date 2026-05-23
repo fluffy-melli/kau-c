@@ -3,11 +3,8 @@
 #include "layout/string.h"
 
 typedef struct {
-    int perfect;
-    int great;
-    int good;
-    int bad;
-    int miss;
+    float totalLoss;
+    float userLoss;
 
     float lastElapsed;
     float lastLossSecond;

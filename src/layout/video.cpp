@@ -90,7 +90,7 @@ extern "C" {
 
         DrawRectangle(
             0,
-            0,
+            screenHeight - (int) progressHeight,
             screenWidth,
             (int) progressHeight,
             VIDEO_PREGRESS_BACKGROUND_COLOR
@@ -98,7 +98,7 @@ extern "C" {
 
         DrawRectangle(
             0,
-            0,
+            screenHeight - (int) progressHeight,
             (int) progressWidth,
             (int) progressHeight,
             VIDEO_PREGRESS_COLOR

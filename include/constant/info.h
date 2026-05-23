@@ -21,6 +21,8 @@
 #define INFO_ARTIST_SPACING    0.001562f // 1280: 2px
 #define INFO_LANGCOUNT_SPACING 0.002343f // 1280: 3px
 
+#define INFO_BACKGROUND_OUTLINE_SIZE 0.001562f // 1280: 2px
+
 #define INFO_TITLE_COLOR     ((Color) {255, 255, 255, 255})
 #define INFO_ARTIST_COLOR    ((Color) {200, 200, 200, 255})
 #define INFO_LANGCOUNT_COLOR ((Color) {255, 255, 255, 255})
@@ -30,4 +32,5 @@
 #define INFO_LANGCOUNT_OUTLINE_COLOR ((Color) {0, 0, 0, 255})
 
 #define INFO_BACKGROUND_COLOR           ((Color) {100, 200, 255, 255})
+#define INFO_BACKGROUND_OUTLINE_COLOR   ((Color) {0, 0, 0, 10})
 #define INFO_LANGCOUNT_BACKGROUND_COLOR ((Color) {55, 130, 200, 255})

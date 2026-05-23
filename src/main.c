@@ -23,19 +23,6 @@ int main() {
         FILE_FONT_EXTRA_BOLD_PATH
     );
 
-    Score* score = NewScore();
-    ShortNoteList* short_notes = NewShortNoteList();
-
-    ShortNoteListAdd(short_notes, 0, 1.0f);
-    ShortNoteListAdd(short_notes, 1, 1.5f);
-    ShortNoteListAdd(short_notes, 2, 2.0f);
-    ShortNoteListAdd(short_notes, 3, 2.5f);
-    ShortNoteListAdd(short_notes, 4, 3.0f);
-    ShortNoteListAdd(short_notes, 3, 3.5f);
-    ShortNoteListAdd(short_notes, 2, 4.0f);
-    ShortNoteListAdd(short_notes, 1, 4.5f);
-    ShortNoteListAdd(short_notes, 0, 5.0f);
-
     int stage_id = 0;
 
     StageInfoJSON* stage_info = OpenStageInfo(TextFormat(FILE_STAGE_PATH, stage_id));
@@ -50,6 +37,39 @@ int main() {
     const char* artist = StageInfoGetArtist(stage_info);
 
     int laneCount = StageInfoGetLaneCount(stage_info);
+
+    Score* score = NewScore();
+    ShortNoteList* short_notes = NewShortNoteList();
+
+    switch (laneCount) {
+        case 4:
+            for (int i = 0; i < 500; i++) {
+                int period = 6;
+                int x = i % period;
+                int lane = x < 4 ? x : 6 - x;
+
+                ShortNoteListAdd(short_notes, lane, 1.0f + i * 0.5f);
+            }
+            break;
+        case 5:
+            for (int i = 0; i < 500; i++) {
+                int period = 8;
+                int x = i % period;
+                int lane = x < 5 ? x : 8 - x;
+
+                ShortNoteListAdd(short_notes, lane, 1.0f + i * 0.5f);
+            }
+            break;
+        case 6:
+            for (int i = 0; i < 500; i++) {
+                int period = 10;
+                int x = i % period;
+                int lane = x < 6 ? x : 10 - x;
+
+                ShortNoteListAdd(short_notes, lane, 1.0f + i * 0.5f);
+            }
+            break;
+    }
     
     Info* info = LoadInfo(preview_path, title, artist);
     Music audio = LoadMusicStream(audio_path);
@@ -70,7 +90,7 @@ int main() {
 
         UpdateMusicStream(audio);
 
-        float elapsed = GetMusicTimePlayed(audio);
+        float elapsed = GetTime(); //GetMusicTimePlayed(audio);
 
         VideoImageRender(player, elapsed);
 
