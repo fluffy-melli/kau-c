@@ -11,6 +11,7 @@ void CloseStageInfo(StageInfoJSON* stage_info);
 
 const char* StageInfoGetTitle(StageInfoJSON* stage_info);
 const char* StageInfoGetArtist(StageInfoJSON* stage_info);
+int StageInfoGetLaneCount(StageInfoJSON* stage_info);
 
 const char* StageInfoGetAudioPath(StageInfoJSON* stage_info);
 const char* StageInfoGetVideoPath(StageInfoJSON* stage_info);

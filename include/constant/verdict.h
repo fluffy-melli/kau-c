@@ -1,0 +1,8 @@
+#pragma once
+
+#define VERDICT_PERFECT_SECONDS 0.01f // 20ms
+#define VERDICT_GREAT_SECONDS   0.02f // 40ms
+#define VERDICT_GOOD_SECONDS    0.03f // 60ms
+#define VERDICT_IGNORE_SECONDS  0.05f // 100ms
+
+// VERDICT_BAD_SECONDS <- else

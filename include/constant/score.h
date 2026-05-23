@@ -34,6 +34,18 @@
 #define SCORE_BAD_OUTLINE_COLOR     ((Color) {150, 30, 30, 255})
 #define SCORE_MISS_OUTLINE_COLOR    ((Color) {100, 0, 0, 255})
 
+#define SCORE_FAST_FONT_SIZE 0.02222f // 720: 16px
+#define SCORE_SLOW_FONT_SIZE 0.02222f // 720: 16px
+
+#define SCORE_FAST_SPACING 0.00277f // 720: 2px
+#define SCORE_SLOW_SPACING 0.00277f // 720: 2px
+
+#define SCORE_FAST_COLOR ((Color) {0, 0, 255, 255})
+#define SCORE_SLOW_COLOR ((Color) {255, 0, 0, 255})
+
+#define SCORE_FAST_OUTLINE_COLOR ((Color) {0, 0, 150, 255})
+#define SCORE_SLOW_OUTLINE_COLOR ((Color) {150, 0, 0, 255})
+
 #define SCORE_NUMBER_COLOR ((Color) {255, 255, 255, 255})
 #define SCORE_BACKGROUND_COLOR ((Color) {0, 0, 0, 200})
 

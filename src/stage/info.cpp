@@ -9,6 +9,7 @@
 struct StageInfoJSONInfo {
     std::string title;
     std::string artist;
+    int lane_count;
 };
 
 struct StageInfoJSONPath {
@@ -27,7 +28,8 @@ struct glz::meta<StageInfoJSONInfo> {
     using T = StageInfoJSONInfo;
     static constexpr auto value = glz::object(
         "title", &T::title,
-        "artist", &T::artist
+        "artist", &T::artist,
+        "lane_count", &T::lane_count
     );
 };
 
@@ -80,6 +82,13 @@ const char* StageInfoGetArtist(StageInfoJSON* stage_info) {
         return nullptr;
     }
     return stage_info->info.artist.c_str();
+}
+
+int StageInfoGetLaneCount(StageInfoJSON* stage_info) {
+    if (!stage_info) {
+        return -1;
+    }
+    return stage_info->info.lane_count;
 }
 
 const char* StageInfoGetAudioPath(StageInfoJSON* stage_info) {

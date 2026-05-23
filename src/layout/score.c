@@ -1,9 +1,13 @@
 #include "layout/score.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include "layout/string.h"
 #include "constant/info.h"
+#include "constant/lane.h"
+#include "constant/note.h"
 #include "constant/score.h"
+#include "constant/verdict.h"
 
 Score* NewScore() {
     Score* score = malloc(sizeof(Score));
@@ -16,6 +20,9 @@ Score* NewScore() {
     score->good = 0;
     score->bad = 0;
     score->miss = 0;
+
+    score->lastElapsed = -999.0f;
+    score->lastLossSecond = 0.0f;
 
     return score;
 }
@@ -323,5 +330,315 @@ int ScoreRender(Score* score, Fonts* fonts) {
         SCORE_NUMBER_COLOR
     );
     
+    return 0;
+}
+
+int ScoreRenderAtLane(Score* score, Fonts* fonts, int laneCount, float elapsed) {
+    if (!score) {
+        return -1;
+    }
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    int lineWidth = screenWidth * LANE_WIDTH;
+    int noteWidth = screenWidth * NOTE_WIDTH;
+
+    int infoXPos = screenWidth * INFO_GAP;
+    int infoWidth = screenWidth * INFO_WIDTH;
+
+    int fieldXPos = lineWidth + infoWidth + infoXPos * 2;
+
+    int scoreXPos = fieldXPos + noteWidth * laneCount / 2;
+    int scoreYPos = 400;
+
+    float timeDiff = elapsed - score->lastElapsed;
+
+    int perfectFontSize = screenHeight * SCORE_PERFECT_FONT_SIZE;
+    int perfectSpacing = screenHeight * SCORE_PERFECT_SPACING;
+
+    int greatFontSize = screenHeight * SCORE_GREAT_FONT_SIZE;
+    int greatSpacing = screenHeight * SCORE_GREAT_SPACING;
+
+    int goodFontSize = screenHeight * SCORE_GOOD_FONT_SIZE;
+    int goodSpacing = screenHeight * SCORE_GOOD_SPACING;
+
+    int badFontSize = screenHeight * SCORE_BAD_FONT_SIZE;
+    int badSpacing = screenHeight * SCORE_BAD_SPACING;
+
+    int missFontSize = screenHeight * SCORE_MISS_FONT_SIZE;
+    int missSpacing = screenHeight * SCORE_MISS_SPACING;
+
+    int fastFontSize = screenHeight * SCORE_FAST_FONT_SIZE;
+    int fastSpacing = screenHeight * SCORE_FAST_SPACING;
+
+    int slowFontSize = screenHeight * SCORE_SLOW_FONT_SIZE;
+    int slowSpacing = screenHeight * SCORE_SLOW_SPACING;
+
+    if (timeDiff >= 0.0f && timeDiff <= 1.0f) {
+        float absLossSecond = fabsf(score->lastLossSecond);
+
+        if (absLossSecond <= VERDICT_PERFECT_SECONDS) {
+            DrawOutlineAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "PERFECT",
+                scoreXPos,
+                scoreYPos,
+                2,
+                perfectSpacing,
+                perfectFontSize,
+                SCORE_PERFECT_OUTLINE_COLOR
+            );
+
+            DrawStringAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "PERFECT",
+                scoreXPos,
+                scoreYPos,
+                perfectSpacing,
+                perfectFontSize,
+                SCORE_PERFECT_COLOR
+            );
+        } else if (absLossSecond <= VERDICT_GREAT_SECONDS) {
+            DrawOutlineAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "GREAT",
+                scoreXPos,
+                scoreYPos,
+                2,
+                greatSpacing,
+                greatFontSize,
+                SCORE_GREAT_OUTLINE_COLOR
+            );
+
+            DrawStringAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "GREAT",
+                scoreXPos,
+                scoreYPos,
+                greatSpacing,
+                greatFontSize,
+                SCORE_GREAT_COLOR
+            );
+
+            if (score->lastLossSecond < 0.0f) {
+                DrawOutlineAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "FAST",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    2,
+                    fastSpacing,
+                    fastFontSize,
+                    SCORE_FAST_OUTLINE_COLOR
+                );
+
+                DrawStringAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "FAST",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    fastSpacing,
+                    fastFontSize,
+                    SCORE_FAST_COLOR
+                );
+            } else if (score->lastLossSecond > 0.0f) {
+                DrawOutlineAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "SLOW",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    2,
+                    slowSpacing,
+                    slowFontSize,
+                    SCORE_SLOW_OUTLINE_COLOR
+                );
+
+                DrawStringAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "SLOW",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    slowSpacing,
+                    slowFontSize,
+                    SCORE_SLOW_COLOR
+                );
+            }
+        } else if (absLossSecond <= VERDICT_GOOD_SECONDS) {
+            DrawOutlineAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "GOOD",
+                scoreXPos,
+                scoreYPos,
+                2,
+                goodSpacing,
+                goodFontSize,
+                SCORE_GOOD_OUTLINE_COLOR
+            );
+
+            DrawStringAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "GOOD",
+                scoreXPos,
+                scoreYPos,
+                goodSpacing,
+                goodFontSize,
+                SCORE_GOOD_COLOR
+            );
+
+            if (score->lastLossSecond < 0.0f) {
+                DrawOutlineAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "FAST",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    2,
+                    fastSpacing,
+                    fastFontSize,
+                    SCORE_FAST_OUTLINE_COLOR
+                );
+
+                DrawStringAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "FAST",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    fastSpacing,
+                    fastFontSize,
+                    SCORE_FAST_COLOR
+                );
+            } else if (score->lastLossSecond > 0.0f) {
+                DrawOutlineAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "SLOW",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    2,
+                    slowSpacing,
+                    slowFontSize,
+                    SCORE_SLOW_OUTLINE_COLOR
+                );
+
+                DrawStringAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "SLOW",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    slowSpacing,
+                    slowFontSize,
+                    SCORE_SLOW_COLOR
+                );
+            }
+        } else if (absLossSecond <= VERDICT_IGNORE_SECONDS) {
+            DrawOutlineAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "BAD",
+                scoreXPos,
+                scoreYPos,
+                2,
+                badSpacing,
+                badFontSize,
+                SCORE_BAD_OUTLINE_COLOR
+            );
+
+            DrawStringAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "BAD",
+                scoreXPos,
+                scoreYPos,
+                badSpacing,
+                badFontSize,
+                SCORE_BAD_COLOR
+            );
+
+            if (score->lastLossSecond < 0.0f) {
+                DrawOutlineAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "FAST",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    2,
+                    fastSpacing,
+                    fastFontSize,
+                    SCORE_FAST_OUTLINE_COLOR
+                );
+
+                DrawStringAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "FAST",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    fastSpacing,
+                    fastFontSize,
+                    SCORE_FAST_COLOR
+                );
+            } else if (score->lastLossSecond > 0.0f) {
+                DrawOutlineAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "SLOW",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    2,
+                    slowSpacing,
+                    slowFontSize,
+                    SCORE_SLOW_OUTLINE_COLOR
+                );
+
+                DrawStringAtCenter(
+                    fonts,
+                    FONT_EXTRA_BOLD,
+                    "SLOW",
+                    scoreXPos,
+                    scoreYPos + greatFontSize + greatSpacing,
+                    slowSpacing,
+                    slowFontSize,
+                    SCORE_SLOW_COLOR
+                );
+            }
+        } else {
+            DrawOutlineAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "MISS",
+                scoreXPos,
+                scoreYPos,
+                2,
+                missSpacing,
+                missFontSize,
+                SCORE_MISS_OUTLINE_COLOR
+            );
+
+            DrawStringAtCenter(
+                fonts,
+                FONT_EXTRA_BOLD,
+                "MISS",
+                scoreXPos,
+                scoreYPos,
+                missSpacing,
+                missFontSize,
+                SCORE_MISS_COLOR
+            );
+        }
+    }
+
     return 0;
 }

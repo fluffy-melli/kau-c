@@ -2,10 +2,7 @@
 
 #include <raylib.h>
 
-#define LANE_LINE_WIDTH 0.00468f // 1280: 6px
-
-#define LANE_NOTE_WIDTH  0.05625f // 1280: 74px
-#define LANE_NOTE_HEIGHT 0.03333f // 720:  24px
+#define LANE_WIDTH 0.00468f // 1280: 6px
 
 #define LANE_JUDGEMENT_Y 0.13888f // 720: 100px (screen bottom)
 
@@ -15,6 +12,7 @@
 
 #define LANE_KEY_PRESS_COLOR ((Color) {255, 255, 255, 100})
 
+// TODO: go to config later
 #define LANE_4K_1 KEY_A // a
 #define LANE_4K_2 KEY_S // s
 #define LANE_4K_3 KEY_K // k

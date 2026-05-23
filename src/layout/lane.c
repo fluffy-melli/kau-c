@@ -3,15 +3,16 @@
 #include <raylib.h>
 #include "constant/info.h"
 #include "constant/lane.h"
+#include "constant/note.h"
 
 void LaneLineRender(int laneCount) {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    int lineWidth = screenWidth * LANE_LINE_WIDTH;
+    int lineWidth = screenWidth * LANE_WIDTH;
 
-    int noteWidth = screenWidth * LANE_NOTE_WIDTH;
-    int noteHeight = screenHeight * LANE_NOTE_HEIGHT;
+    int noteWidth = screenWidth * NOTE_WIDTH;
+    int noteHeight = screenHeight * NOTE_HEIGHT;
 
     int infoXPos = screenWidth * INFO_GAP;
     int infoWidth = screenWidth * INFO_WIDTH;
@@ -66,12 +67,13 @@ void LaneKeyPressRender(int laneCount) {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    int noteWidth = screenWidth * LANE_NOTE_WIDTH;
+    int lineWidth = screenWidth * LANE_WIDTH;
+    int noteWidth = screenWidth * NOTE_WIDTH;
 
     int infoXPos = screenWidth * INFO_GAP;
     int infoWidth = screenWidth * INFO_WIDTH;
 
-    int fieldXPos = infoWidth + infoXPos * 2;
+    int fieldXPos = lineWidth + infoWidth + infoXPos * 2;
 
     switch (laneCount) {
         case 4:

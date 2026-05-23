@@ -150,6 +150,8 @@ add_executable(
     src/layout/video.cpp
     src/layout/string.c
     src/layout/score.c
+    src/layout/note.c
+    src/note/short.c
 )
 
 target_include_directories(

@@ -29,5 +29,5 @@
 #define INFO_ARTIST_OUTLINE_COLOR    ((Color) {0, 0, 0, 255})
 #define INFO_LANGCOUNT_OUTLINE_COLOR ((Color) {0, 0, 0, 255})
 
-#define INFO_BACKGROUND_COLOR           ((Color) {185, 238, 132, 255})
-#define INFO_LANGCOUNT_BACKGROUND_COLOR ((Color) {255, 165, 0, 255})
+#define INFO_BACKGROUND_COLOR           ((Color) {100, 200, 255, 255})
+#define INFO_LANGCOUNT_BACKGROUND_COLOR ((Color) {55, 130, 200, 255})
