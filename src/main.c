@@ -9,6 +9,7 @@
 #include "layout/score.h"
 #include "layout/string.h"
 #include "constant/file.h"
+#include "config/config.h"
 
 int main() {
     SetConfigFlags(FLAG_VSYNC_HINT);
@@ -22,6 +23,8 @@ int main() {
         FILE_FONT_BOLD_PATH,
         FILE_FONT_EXTRA_BOLD_PATH
     );
+
+    ConfigInfoJSON* config = OpenConfigInfo(FILE_CONFIG_PATH);
 
     int stage_id = 0;
 
@@ -97,10 +100,10 @@ int main() {
         VideoImageRender(player, elapsed);
 
         LaneLineRender(laneCount);
-        LaneKeyPressRender(laneCount);
+        LaneKeyPressRender(config, laneCount);
 
-        ShortNoteListRender(short_notes, score, laneCount, elapsed);
-        ShortNoteListKeyPressRender(short_notes, score, laneCount, elapsed);
+        ShortNoteListRender(short_notes, score, config, laneCount, elapsed);
+        ShortNoteListKeyPressRender(short_notes, score, config, laneCount, elapsed);
 
         VideoProgressRender(player, elapsed);
         InfoRender(info, fonts, laneCount);

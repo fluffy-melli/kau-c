@@ -4,6 +4,7 @@
 #include "constant/info.h"
 #include "constant/lane.h"
 #include "constant/note.h"
+#include "config/config.h"
 
 void LaneLineRender(int laneCount) {
     int screenWidth = GetScreenWidth();
@@ -63,7 +64,7 @@ void LaneLineRender(int laneCount) {
     );
 }
 
-void LaneKeyPressRender(int laneCount) {
+void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
@@ -77,7 +78,7 @@ void LaneKeyPressRender(int laneCount) {
 
     switch (laneCount) {
         case 4:
-            if (IsKeyDown(LANE_4K_1)) {
+            if (ConfigInfoIsDown(config, laneCount, 0)) {
                 DrawRectangle(
                     fieldXPos,
                     0,
@@ -87,7 +88,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_4K_2)) {
+            if (ConfigInfoIsDown(config, laneCount, 1)) {
                 DrawRectangle(
                     fieldXPos + noteWidth,
                     0,
@@ -97,7 +98,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_4K_3)) {
+            if (ConfigInfoIsDown(config, laneCount, 2)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 2,
                     0,
@@ -107,7 +108,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_4K_4)) {
+            if (ConfigInfoIsDown(config, laneCount, 3)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 3,
                     0,
@@ -119,7 +120,7 @@ void LaneKeyPressRender(int laneCount) {
             
             break;
         case 5:
-            if (IsKeyDown(LANE_5K_1)) {
+            if (ConfigInfoIsDown(config, laneCount, 0)) {
                 DrawRectangle(
                     fieldXPos,
                     0,
@@ -129,7 +130,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_5K_2)) {
+            if (ConfigInfoIsDown(config, laneCount, 1)) {
                 DrawRectangle(
                     fieldXPos + noteWidth,
                     0,
@@ -139,15 +140,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_5K_3)) {
-                DrawRectangle(
-                    fieldXPos + noteWidth * 2,
-                    0,
-                    noteWidth,
-                    screenHeight,
-                    LANE_KEY_PRESS_COLOR
-                );
-            } else if (IsKeyDown(LANE_5K_4)) {
+            if (ConfigInfoIsDown(config, laneCount, 2)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 2,
                     0,
@@ -157,7 +150,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_5K_5)) {
+            if (ConfigInfoIsDown(config, laneCount, 3)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 3,
                     0,
@@ -167,7 +160,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_5K_6)) {
+            if (ConfigInfoIsDown(config, laneCount, 4)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 4,
                     0,
@@ -179,7 +172,7 @@ void LaneKeyPressRender(int laneCount) {
 
             break;
         case 6:
-            if (IsKeyDown(LANE_6K_1)) {
+            if (ConfigInfoIsDown(config, laneCount, 0)) {
                 DrawRectangle(
                     fieldXPos,
                     0,
@@ -189,7 +182,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_6K_2)) {
+            if (ConfigInfoIsDown(config, laneCount, 1)) {
                 DrawRectangle(
                     fieldXPos + noteWidth,
                     0,
@@ -199,7 +192,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_6K_3)) {
+            if (ConfigInfoIsDown(config, laneCount, 2)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 2,
                     0,
@@ -209,7 +202,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_6K_4)) {
+            if (ConfigInfoIsDown(config, laneCount, 3)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 3,
                     0,
@@ -219,7 +212,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_6K_5)) {
+            if (ConfigInfoIsDown(config, laneCount, 4)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 4,
                     0,
@@ -229,7 +222,7 @@ void LaneKeyPressRender(int laneCount) {
                 );
             }
 
-            if (IsKeyDown(LANE_6K_6)) {
+            if (ConfigInfoIsDown(config, laneCount, 5)) {
                 DrawRectangle(
                     fieldXPos + noteWidth * 5,
                     0,

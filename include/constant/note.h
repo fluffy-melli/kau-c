@@ -15,6 +15,3 @@
 #define NOTE_6K_MIDEL_COLOR ((Color) {140, 255, 180, 255})
 #define NOTE_6K_INNER_COLOR ((Color) {102, 120, 255, 255})
 #define NOTE_6K_OUTER_COLOR ((Color) {255, 255, 255, 255})
-
-// TODO: go to config later
-#define DROP_SPEED_SECONDS 0.75f

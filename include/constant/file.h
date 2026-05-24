@@ -7,3 +7,5 @@
 
 #define FILE_STAGE_PATH           "resources/stage/%d/info.json"
 #define FILE_STAGE_RESOURCES_PATH "resources/stage/%d/resources"
+
+#define FILE_CONFIG_PATH "resources/config.json"

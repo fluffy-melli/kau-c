@@ -7,6 +7,7 @@
 #include "constant/info.h"
 #include "constant/lane.h"
 #include "constant/verdict.h"
+#include "config/config.h"
 
 float ShortNoteGetYPos(ShortNote* note, int judgmentY, float elapsed, float dropSpeedSeconds) {
     if (!note) {
@@ -24,7 +25,7 @@ float ShortNoteGetYPos(ShortNote* note, int judgmentY, float elapsed, float drop
     return yPos;
 }
 
-int ShortNoteListRender(ShortNoteList* list, Score* score, int laneCount, float elapsed) {
+int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
     if (!list) {
         return -1;
     }
@@ -47,7 +48,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, int laneCount, float 
     for (int i = 0; i < list->length; i++) {
         ShortNote* note = &list->notes[i];
 
-        float yPos = ShortNoteGetYPos(note, judgmentYPos, elapsed, DROP_SPEED_SECONDS);
+        float yPos = ShortNoteGetYPos(note, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
         if (yPos < 0) {
             continue;
         }
@@ -153,7 +154,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, int laneCount, float 
     return 0;
 }
 
-int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, int laneCount, float elapsed) {
+int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
     if (!list) {
         return -1;
     }
@@ -161,58 +162,7 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, int laneCount
     for (int i = 0; i < list->length; i++) {
         ShortNote* note = &list->notes[i];
         
-        int pressKey;
-        
-        switch (laneCount) {
-            case 4:
-                if (note->lane == 0) {
-                    pressKey = IsKeyPressed(LANE_4K_1);
-                } else if (note->lane == 1) {
-                    pressKey = IsKeyPressed(LANE_4K_2);
-                } else if (note->lane == 2) {
-                    pressKey = IsKeyPressed(LANE_4K_3);
-                } else if (note->lane == 3) {
-                    pressKey = IsKeyPressed(LANE_4K_4);
-                } else {
-                    pressKey = 0;
-                }
-                break;
-            case 5:
-                if (note->lane == 0) {
-                    pressKey = IsKeyPressed(LANE_5K_1);
-                } else if (note->lane == 1) {
-                    pressKey = IsKeyPressed(LANE_5K_2);
-                } else if (note->lane == 2) {
-                    pressKey = IsKeyPressed(LANE_5K_3) || IsKeyPressed(LANE_5K_4);
-                } else if (note->lane == 3) {
-                    pressKey = IsKeyPressed(LANE_5K_5);
-                } else if (note->lane == 4) {
-                    pressKey = IsKeyPressed(LANE_5K_6);
-                } else {
-                    pressKey = 0;
-                }
-                break;
-            case 6:
-                if (note->lane == 0) {
-                    pressKey = IsKeyPressed(LANE_6K_1);
-                } else if (note->lane == 1) {
-                    pressKey = IsKeyPressed(LANE_6K_2);
-                } else if (note->lane == 2) {
-                    pressKey = IsKeyPressed(LANE_6K_3);
-                } else if (note->lane == 3) {
-                    pressKey = IsKeyPressed(LANE_6K_4);
-                } else if (note->lane == 4) {
-                    pressKey = IsKeyPressed(LANE_6K_5);
-                } else if (note->lane == 5) {
-                    pressKey = IsKeyPressed(LANE_6K_6);
-                } else {
-                    pressKey = 0;
-                }
-                break;
-            default:
-                pressKey = 0;
-                break;
-        }
+        int pressKey = ConfigInfoIsPressed(config, laneCount, note->lane);
 
         if (!pressKey) {
             continue;
@@ -242,7 +192,7 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, int laneCount
         score->totalLoss += VERDICT_IGNORE_SECONDS;
         score->userLoss += fabsf(time);
 
-        score->score += (int) ((VERDICT_IGNORE_SECONDS - fabsf(time)) * 1000.0f) / DROP_SPEED_SECONDS;
+        score->score += (int) ((VERDICT_IGNORE_SECONDS - fabsf(time)) * 1000.0f) / ConfigInfoGetDropSpeed(config);
     }
 
     return 0;

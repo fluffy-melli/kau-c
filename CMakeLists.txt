@@ -152,6 +152,7 @@ add_executable(
     src/layout/score.c
     src/layout/note.c
     src/note/short.c
+    src/config/config.cpp
 )
 
 target_include_directories(
