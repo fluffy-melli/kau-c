@@ -32,7 +32,6 @@ int main() {
     StageInfoJSON* stage_info = OpenStageInfo(TextFormat(FILE_STAGE_PATH, stage_id));
 
     const char* resources_path = TextFormat(FILE_STAGE_RESOURCES_PATH, stage_id);
-    const char* pattern_path = TextFormat(FILE_STAGE_PATTERN_PATH, stage_id);
 
     const char* audio_path = TextFormat("%s/%s", resources_path, StageInfoGetAudioPath(stage_info));
     const char* video_path = TextFormat("%s/%s", resources_path, StageInfoGetVideoPath(stage_info));
@@ -46,7 +45,7 @@ int main() {
     Score* score = NewScore();
     ShortNoteList* short_notes = NewShortNoteList();
 
-    OpenPatternFile(pattern_path, short_notes);
+    OpenPatternFile(TextFormat(FILE_STAGE_PATTERN_PATH, stage_id), short_notes);
     
     Info* info = LoadInfo(preview_path, title, artist);
     Music audio = LoadMusicStream(audio_path);
