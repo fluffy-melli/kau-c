@@ -23,5 +23,8 @@
             "key6": 76
         }
     },
-    "note-drop-speed": 0.500
+    "note": {
+        "spawn-offset": 0.000,
+        "drop-speed": 0.500
+    }
 }

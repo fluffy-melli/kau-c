@@ -14,6 +14,7 @@ int ConfigInfoIsPressed(ConfigInfoJSON* config, int laneCount, int lane);
 int ConfigInfoIsReleased(ConfigInfoJSON* config, int laneCount, int lane);
 
 float ConfigInfoGetDropSpeed(ConfigInfoJSON* config);
+float ConfigInfoGetSpawnOffset(ConfigInfoJSON* config);
 
 #ifdef __cplusplus
 }

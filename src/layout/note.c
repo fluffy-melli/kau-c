@@ -9,16 +9,12 @@
 #include "constant/verdict.h"
 #include "config/config.h"
 
-float ShortNoteGetYPos(ShortNote* note, int judgmentY, float elapsed, float dropSpeedSeconds) {
-    if (!note) {
+float ShortNoteGetYPos(float target_seconds, int judgmentY, float elapsed, float dropSpeedSeconds) {
+    if (elapsed < target_seconds - dropSpeedSeconds) {
         return -1;
     }
 
-    if (elapsed < note->arrival_seconds - dropSpeedSeconds) {
-        return -1;
-    }
-
-    float dropProgress = (elapsed - (note->arrival_seconds - dropSpeedSeconds)) / dropSpeedSeconds;
+    float dropProgress = (elapsed - (target_seconds - dropSpeedSeconds)) / dropSpeedSeconds;
 
     float yPos = dropProgress * judgmentY;
 
@@ -48,12 +44,14 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
     for (int i = 0; i < list->length; i++) {
         ShortNote* note = &list->notes[i];
 
-        float yPos = ShortNoteGetYPos(note, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
+        float arrival_second = note->arrival_seconds + ConfigInfoGetSpawnOffset(config);
+
+        float yPos = ShortNoteGetYPos(arrival_second, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
         if (yPos < 0) {
             continue;
         }
 
-        if (yPos > screenHeight) {
+        if (elapsed > arrival_second + VERDICT_IGNORE_SECONDS) {
             score->totalLoss += VERDICT_IGNORE_SECONDS;
             score->userLoss += VERDICT_IGNORE_SECONDS;
             score->lastElapsed = elapsed;
@@ -64,6 +62,10 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
             continue;
         }
 
+        if (yPos > screenHeight + noteHeight / 2) {
+            continue;
+        }
+
         int laneXPos = fieldXPos + noteWidth * note->lane;
 
         switch (laneCount) {
@@ -71,7 +73,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 if (note->lane == 1 || note->lane == 2) {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_4K_INNER_COLOR
@@ -79,7 +81,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 } else {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_4K_OUTER_COLOR
@@ -90,7 +92,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 if (note->lane == 2) {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_5K_MIDEL_COLOR
@@ -98,7 +100,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 } else if (note->lane == 1 || note->lane == 3) {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_5K_INNER_COLOR
@@ -106,7 +108,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 } else {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_5K_OUTER_COLOR
@@ -117,7 +119,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 if (note->lane == 2 || note->lane == 3) {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_6K_MIDEL_COLOR
@@ -125,7 +127,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 } else if (note->lane == 1 || note->lane == 4) {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_6K_INNER_COLOR
@@ -133,7 +135,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
                 } else {
                     DrawRectangle(
                         laneXPos,
-                        yPos,
+                        yPos - noteHeight / 2,
                         noteWidth,
                         noteHeight,
                         NOTE_6K_OUTER_COLOR
@@ -143,7 +145,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
             default:
                 DrawRectangle(
                     laneXPos,
-                    yPos,
+                    yPos - noteHeight / 2,
                     noteWidth,
                     noteHeight,
                     WHITE
@@ -168,7 +170,9 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, ConfigInfoJSO
             continue;
         }
 
-        float time = elapsed - note->arrival_seconds;
+        float arrival_second = note->arrival_seconds + ConfigInfoGetSpawnOffset(config);
+
+        float time = elapsed - arrival_second;
 
         if (fabsf(time) > VERDICT_IGNORE_SECONDS) {
             continue;
@@ -278,12 +282,14 @@ int LongNoteListRender(LongNoteList* list, Score* score, ConfigInfoJSON *config,
         float headY = -1.0f;
         float tailY = -1.0f;
 
+        float arrival_second = note->arrival_seconds + ConfigInfoGetSpawnOffset(config);
+
         if (note->isPressed) {
-            headY = judgmentYPos - noteHeight / 2;
-            tailY = LongNoteGetYPos(note->arrival_seconds + note->length_seconds, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
+            headY = judgmentYPos;
+            tailY = LongNoteGetYPos(arrival_second + note->length_seconds, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
         } else {
-            headY = LongNoteGetYPos(note->arrival_seconds, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
-            tailY = LongNoteGetYPos(note->arrival_seconds + note->length_seconds, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
+            headY = LongNoteGetYPos(arrival_second, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
+            tailY = LongNoteGetYPos(arrival_second + note->length_seconds, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
         }
 
         if (headY < 0 && tailY < 0) {
@@ -311,7 +317,7 @@ int LongNoteListRender(LongNoteList* list, Score* score, ConfigInfoJSON *config,
         if (headY >= 0 && headY <= screenHeight) {
             DrawRectangle(
                 laneXPos,
-                headY,
+                headY - noteHeight / 2,
                 noteWidth,
                 noteHeight,
                 normalColor
@@ -330,8 +336,10 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
     for (int i = 0; i < list->length; i++) {
         LongNote* note = &list->notes[i];
 
+        float arrival_second = note->arrival_seconds + ConfigInfoGetSpawnOffset(config);
+
         if (note->isPressed == 0) {
-            if (elapsed > note->arrival_seconds + VERDICT_IGNORE_SECONDS) {
+            if (elapsed > arrival_second + VERDICT_IGNORE_SECONDS) {
                 score->totalLoss += VERDICT_IGNORE_SECONDS * 2;
                 score->userLoss += VERDICT_IGNORE_SECONDS * 2;
                 score->currentCombo = 0;
@@ -346,7 +354,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
             int pressKey = ConfigInfoIsPressed(config, laneCount, note->lane);
 
             if (pressKey) {
-                float time = elapsed - note->arrival_seconds;
+                float time = elapsed - arrival_second;
 
                 if (fabsf(time) <= VERDICT_IGNORE_SECONDS) {
                     note->isPressed = 1;
@@ -370,7 +378,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
                 }
             }
         } else {
-            if (elapsed > note->arrival_seconds + note->length_seconds + VERDICT_IGNORE_SECONDS) {
+            if (elapsed > arrival_second + note->length_seconds + VERDICT_IGNORE_SECONDS) {
                 score->totalLoss += VERDICT_IGNORE_SECONDS;
                 score->userLoss += VERDICT_IGNORE_SECONDS;
                 score->currentCombo = 0;
@@ -386,7 +394,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
             int released = ConfigInfoIsReleased(config, laneCount, note->lane);
 
             if (released || !isDown) {
-                float time = elapsed - (note->arrival_seconds + note->length_seconds);
+                float time = elapsed - (arrival_second + note->length_seconds);
 
                 if (fabsf(time) <= VERDICT_IGNORE_SECONDS) {
                     if (fabsf(time) <= VERDICT_COMBO_SECONDS) {

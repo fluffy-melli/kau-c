@@ -35,9 +35,14 @@ struct ConfigInfoJSONKeybind {
     ConfigInfoJSON6K k6;
 };
 
+struct ConfigInfoJSONNote {
+    float dropSpeed;
+    float spawnOffset;
+};
+
 struct ConfigInfoJSON {
     ConfigInfoJSONKeybind keybind;
-    float dropSpeed;
+    ConfigInfoJSONNote note;
 };
 
 template <>
@@ -88,11 +93,20 @@ struct glz::meta<ConfigInfoJSONKeybind> {
 };
 
 template <>
+struct glz::meta<ConfigInfoJSONNote> {
+    using T = ConfigInfoJSONNote;
+    static constexpr auto value = glz::object(
+        "drop-speed", &T::dropSpeed,
+        "spawn-offset", &T::spawnOffset
+    );
+};
+
+template <>
 struct glz::meta<ConfigInfoJSON> {
     using T = ConfigInfoJSON;
     static constexpr auto value = glz::object(
         "keybind", &T::keybind,
-        "note-drop-speed", &T::dropSpeed
+        "note", &T::note
     );
 };
 
@@ -303,5 +317,13 @@ float ConfigInfoGetDropSpeed(ConfigInfoJSON* config) {
         return 0.5f;
     }
 
-    return config->dropSpeed;
+    return config->note.dropSpeed;
+}
+
+float ConfigInfoGetSpawnOffset(ConfigInfoJSON* config) {
+    if (!config) {
+        return 0.5f;
+    }
+
+    return config->note.spawnOffset;
 }

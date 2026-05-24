@@ -5,7 +5,7 @@
 #include "note/long.h"
 #include "config/config.h"
 
-float ShortNoteGetYPos(ShortNote* note, int judgmentY, float elapsed, float dropSpeedSeconds);
+float ShortNoteGetYPos(float target_seconds, int judgmentY, float elapsed, float dropSpeedSeconds);
 int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed);
 int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed);
 
