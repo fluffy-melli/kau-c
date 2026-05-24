@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
     int lane;
     float arrival_seconds;
@@ -18,3 +22,8 @@ void CloseShortNoteList(ShortNoteList* list);
 
 int ShortNoteListAdd(ShortNoteList* list, int lane, float arrival_seconds);
 int ShortNoteListRemove(ShortNoteList* list, int index);
+
+#ifdef __cplusplus
+}
+#endif
+

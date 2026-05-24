@@ -145,6 +145,7 @@ add_executable(
     ${PROJECT_NAME}
     src/main.c
     src/stage/info.cpp
+    src/stage/pattern.cpp
     src/layout/lane.c
     src/layout/info.c
     src/layout/video.cpp

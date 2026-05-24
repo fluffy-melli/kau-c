@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include "note/short.h"
 #include "stage/info.h"
+#include "stage/pattern.h"
 #include "layout/note.h"
 #include "layout/lane.h"
 #include "layout/info.h"
@@ -31,6 +32,7 @@ int main() {
     StageInfoJSON* stage_info = OpenStageInfo(TextFormat(FILE_STAGE_PATH, stage_id));
 
     const char* resources_path = TextFormat(FILE_STAGE_RESOURCES_PATH, stage_id);
+    const char* pattern_path = TextFormat(FILE_STAGE_PATTERN_PATH, stage_id);
 
     const char* audio_path = TextFormat("%s/%s", resources_path, StageInfoGetAudioPath(stage_info));
     const char* video_path = TextFormat("%s/%s", resources_path, StageInfoGetVideoPath(stage_info));
@@ -44,35 +46,7 @@ int main() {
     Score* score = NewScore();
     ShortNoteList* short_notes = NewShortNoteList();
 
-    switch (laneCount) {
-        case 4:
-            for (int i = 0; i < 500; i++) {
-                int period = 6;
-                int x = i % period;
-                int lane = x < 4 ? x : 6 - x;
-
-                ShortNoteListAdd(short_notes, lane, 1.0f + i * 0.5f);
-            }
-            break;
-        case 5:
-            for (int i = 0; i < 500; i++) {
-                int period = 8;
-                int x = i % period;
-                int lane = x < 5 ? x : 8 - x;
-
-                ShortNoteListAdd(short_notes, lane, 1.0f + i * 0.5f);
-            }
-            break;
-        case 6:
-            for (int i = 0; i < 500; i++) {
-                int period = 10;
-                int x = i % period;
-                int lane = x < 6 ? x : 10 - x;
-
-                ShortNoteListAdd(short_notes, lane, 1.0f + i * 0.5f);
-            }
-            break;
-    }
+    OpenPatternFile(pattern_path, short_notes);
     
     Info* info = LoadInfo(preview_path, title, artist);
     Music audio = LoadMusicStream(audio_path);
