@@ -279,7 +279,7 @@ int LongNoteListRender(LongNoteList* list, Score* score, ConfigInfoJSON *config,
         float tailY = -1.0f;
 
         if (note->isPressed) {
-            headY = judgmentYPos;
+            headY = judgmentYPos - noteHeight / 2;
             tailY = LongNoteGetYPos(note->arrival_seconds + note->length_seconds, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
         } else {
             headY = LongNoteGetYPos(note->arrival_seconds, judgmentYPos, elapsed, ConfigInfoGetDropSpeed(config));
