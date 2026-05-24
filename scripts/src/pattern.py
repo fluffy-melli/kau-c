@@ -2,9 +2,8 @@ import json
 import librosa
 import numpy as np
 
-def generate_pattern(mp3_path, num_lanes=4):
+def generate_pattern(mp3_path, num_lanes=5):
     y, sr = librosa.load(mp3_path, sr=None)
-
     onset_env = librosa.onset.onset_strength(y=y, sr=sr)
     onset_frames = librosa.onset.onset_detect(
         onset_envelope=onset_env, sr=sr, wait=10, delta=0.07
@@ -12,9 +11,8 @@ def generate_pattern(mp3_path, num_lanes=4):
     arrival_times = librosa.frames_to_time(onset_frames, sr=sr)
 
     shared_notes = []
-
-    current_lane = int(np.random.randint(0, num_lanes))
     active_long_notes = {}
+    last_lane = -1
 
     for idx, time in enumerate(arrival_times):
         active_long_notes = {lane: end_t for lane, end_t in active_long_notes.items() if end_t > time}
@@ -23,7 +21,14 @@ def generate_pattern(mp3_path, num_lanes=4):
         if not available_lanes:
             continue
 
-        if current_lane not in available_lanes:
+        preferred_lanes = [l for l in available_lanes if l != last_lane]
+        
+        if preferred_lanes:
+            if np.random.rand() < 0.85 or last_lane not in available_lanes:
+                current_lane = int(np.random.choice(preferred_lanes))
+            else:
+                current_lane = last_lane
+        else:
             current_lane = int(np.random.choice(available_lanes))
 
         is_long = (np.random.rand() < 0.15) and (idx + 2 < len(arrival_times))
@@ -34,36 +39,21 @@ def generate_pattern(mp3_path, num_lanes=4):
             
             note = {
                 "t": 1,
-                "l": int(current_lane),
+                "l": current_lane,
                 "a": round(float(time), 3),
                 "len": round(float(duration), 3),
             }
+            
             active_long_notes[current_lane] = time + duration
         else:
             note = {
                 "t": 0,
-                "l": int(current_lane),
+                "l": current_lane,
                 "a": round(float(time), 3),
             }
         
         shared_notes.append(note)
-        rand_choice = np.random.rand()
-
-        if rand_choice < 0.5:
-            direction = np.random.choice([-1, 1])
-            next_lane = current_lane + direction
-            
-            if next_lane < 0:
-                next_lane = 1
-            elif next_lane >= num_lanes:
-                next_lane = num_lanes - 2
-            current_lane = next_lane
-
-        elif rand_choice < 0.8:
-            current_lane = current_lane
-
-        else:
-            current_lane = int(np.random.randint(0, num_lanes))
+        last_lane = current_lane
 
     pattern_data = {"v": shared_notes}
     return pattern_data
