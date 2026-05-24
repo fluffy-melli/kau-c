@@ -141,20 +141,14 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(glaze)
 
+file(
+    GLOB_RECURSE SRC_FILES 
+    "src/*.c"
+    "src/*.cpp"
+)
+
 add_executable(
-    ${PROJECT_NAME}
-    src/main.c
-    src/stage/info.cpp
-    src/stage/pattern.cpp
-    src/layout/lane.c
-    src/layout/info.c
-    src/layout/video.cpp
-    src/layout/string.c
-    src/layout/score.c
-    src/layout/note.c
-    src/note/short.c
-    src/note/long.c
-    src/config/config.cpp
+    ${PROJECT_NAME} ${SRC_FILES}
 )
 
 target_include_directories(

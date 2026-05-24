@@ -5,6 +5,7 @@
 #include "stage/pattern.h"
 #include "layout/note.h"
 #include "layout/lane.h"
+#include "layout/loss.h"
 #include "layout/info.h"
 #include "layout/video.h"
 #include "layout/score.h"
@@ -42,6 +43,7 @@ int main() {
 
     int laneCount = StageInfoGetLaneCount(stage_info);
 
+    Loss* loss = NewLoss();
     Score* score = NewScore();
     ShortNoteList* short_notes = NewShortNoteList();
     LongNoteList* long_notes = NewLongNoteList();
@@ -76,16 +78,18 @@ int main() {
         LaneLineRender(laneCount);
         LaneKeyPressRender(config, laneCount);
 
-        ShortNoteListRender(short_notes, score, config, laneCount, elapsed);
-        ShortNoteListKeyPressRender(short_notes, score, config, laneCount, elapsed);
+        ShortNoteListRender(short_notes, loss, score, config, laneCount, elapsed);
+        ShortNoteListKeyPressRender(short_notes, loss, score, config, laneCount, elapsed);
 
-        LongNoteListRender(long_notes, score, config, laneCount, elapsed);
-        LongNoteListKeyPressRender(long_notes, score, config, laneCount, elapsed);
+        LongNoteListRender(long_notes, loss, score, config, laneCount, elapsed);
+        LongNoteListKeyPressRender(long_notes, loss, score, config, laneCount, elapsed);
 
         VideoProgressRender(player, elapsed);
         InfoRender(info, fonts, laneCount);
         ScoreRender(score, fonts);
         ScoreRenderAtLane(score, fonts, laneCount, elapsed);
+
+        LossRender(loss, fonts, laneCount);
 
         EndDrawing();
     }
@@ -99,6 +103,7 @@ int main() {
     CloseShortNoteList(short_notes);
     CloseLongNoteList(long_notes);
     CloseScore(score);
+    CloseLoss(loss);
     CloseConfigInfo(config);
 
     CloseAudioDevice();

@@ -74,7 +74,10 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
     int infoXPos = screenWidth * INFO_GAP;
     int infoWidth = screenWidth * INFO_WIDTH;
 
+    int judgmentYPos = screenHeight - (screenHeight * LANE_JUDGEMENT_Y);
+
     int fieldXPos = lineWidth + infoWidth + infoXPos * 2;
+    int fieldYPos = judgmentYPos;
 
     switch (laneCount) {
         case 4:
@@ -83,7 +86,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -93,7 +96,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -103,7 +106,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 2,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -113,7 +116,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 3,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -125,7 +128,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -135,7 +138,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -145,7 +148,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 2,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -155,7 +158,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 3,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -165,7 +168,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 4,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -177,7 +180,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -187,7 +190,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -197,7 +200,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 2,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -207,7 +210,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 3,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -217,7 +220,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 4,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }
@@ -227,7 +230,7 @@ void LaneKeyPressRender(ConfigInfoJSON *config, int laneCount) {
                     fieldXPos + noteWidth * 5,
                     0,
                     noteWidth,
-                    screenHeight,
+                    fieldYPos,
                     LANE_KEY_PRESS_COLOR
                 );
             }

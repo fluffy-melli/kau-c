@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "layout/string.h"
+#include "constant/loss.h"
 #include "constant/info.h"
 #include "constant/lane.h"
 #include "constant/note.h"
@@ -361,13 +362,16 @@ int ScoreRenderAtLane(Score* score, Fonts* fonts, int laneCount, float elapsed) 
 
     int fieldXPos = lineWidth + infoWidth + infoXPos * 2;
 
-    int scoreXPos = fieldXPos + noteWidth * laneCount / 2;
-    int scoreYPos = screenHeight - screenHeight * SCORE_SHOW_Y;
+    int lossYPos = screenHeight * LOSS_CENTER_Y;
+    int lossHeight = screenHeight * LOSS_HEIGHT;
 
     float timeDiff = elapsed - score->lastElapsed;
 
     int showFontSize = screenHeight * SCORE_SHOW_FONT_SIZE;
     int showSpacing = screenHeight * SCORE_SHOW_SPACING;
+
+    int scoreXPos = fieldXPos + noteWidth * laneCount / 2;
+    int scoreYPos = lossYPos + lossHeight + showFontSize / 2 + 12;
 
     if (timeDiff >= 0.0f && timeDiff <= 1.0f) {
         float absLossSecond = fabsf(score->lastLossSecond);

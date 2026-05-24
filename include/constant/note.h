@@ -16,7 +16,6 @@
 #define NOTE_6K_INNER_COLOR ((Color) {102, 120, 255, 255})
 #define NOTE_6K_OUTER_COLOR ((Color) {255, 255, 255, 255})
 
-// FOR long note
 #define NOTE_4K_INNER_TAIL_COLOR ((Color) {102, 120, 255, 100})
 #define NOTE_4K_OUTER_TAIL_COLOR ((Color) {255, 255, 255, 100})
 

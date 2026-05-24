@@ -7,6 +7,7 @@
 #include "constant/info.h"
 #include "constant/lane.h"
 #include "constant/verdict.h"
+#include "layout/loss.h"
 #include "config/config.h"
 
 float ShortNoteGetYPos(float target_seconds, int judgmentY, float elapsed, float dropSpeedSeconds) {
@@ -21,7 +22,7 @@ float ShortNoteGetYPos(float target_seconds, int judgmentY, float elapsed, float
     return yPos;
 }
 
-int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
+int ShortNoteListRender(ShortNoteList* list, Loss* loss, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
     if (!list) {
         return -1;
     }
@@ -57,6 +58,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
             score->lastElapsed = elapsed;
             score->lastLossSecond = VERDICT_IGNORE_SECONDS + 9999.0f;
             score->currentCombo = 0;
+            LossAdd(loss, VERDICT_IGNORE_SECONDS - 0.001);
             ShortNoteListRemove(list, i);
             i--;
             continue;
@@ -156,7 +158,7 @@ int ShortNoteListRender(ShortNoteList* list, Score* score, ConfigInfoJSON *confi
     return 0;
 }
 
-int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
+int ShortNoteListKeyPressRender(ShortNoteList* list, Loss* loss, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
     if (!list) {
         return -1;
     }
@@ -195,6 +197,8 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Score* score, ConfigInfoJSO
 
         score->totalLoss += VERDICT_IGNORE_SECONDS;
         score->userLoss += fabsf(time);
+
+        LossAdd(loss, time);
 
         score->score += (int) ((VERDICT_IGNORE_SECONDS - fabsf(time)) * 1000.0f) / ConfigInfoGetDropSpeed(config);
     }
@@ -256,7 +260,7 @@ static void GetNoteColors(int laneCount, int lane, Color* outNormalColor, Color*
     }
 }
 
-int LongNoteListRender(LongNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
+int LongNoteListRender(LongNoteList* list, Loss* loss, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
     if (!list) {
         return -1;
     }
@@ -328,7 +332,7 @@ int LongNoteListRender(LongNoteList* list, Score* score, ConfigInfoJSON *config,
     return 0;
 }
 
-int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
+int LongNoteListKeyPressRender(LongNoteList* list, Loss* loss, Score* score, ConfigInfoJSON *config, int laneCount, float elapsed) {
     if (!list) {
         return -1;
     }
@@ -345,6 +349,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
                 score->currentCombo = 0;
                 score->lastElapsed = elapsed;
                 score->lastLossSecond = VERDICT_IGNORE_SECONDS + 9999.0f;
+                LossAdd(loss, VERDICT_IGNORE_SECONDS - 0.001);
 
                 LongNoteListRemove(list, i);
                 i--;
@@ -373,6 +378,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
 
                     score->totalLoss += VERDICT_IGNORE_SECONDS;
                     score->userLoss += fabsf(time);
+                    LossAdd(loss, time);
 
                     score->score += (int) ((VERDICT_IGNORE_SECONDS - fabsf(time)) * 1000.0f) / ConfigInfoGetDropSpeed(config);
                 }
@@ -384,6 +390,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
                 score->currentCombo = 0;
                 score->lastElapsed = elapsed;
                 score->lastLossSecond = VERDICT_IGNORE_SECONDS + 9999.0f;
+                LossAdd(loss, VERDICT_IGNORE_SECONDS - 0.001);
 
                 LongNoteListRemove(list, i);
                 i--;
@@ -411,6 +418,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
 
                     score->totalLoss += VERDICT_IGNORE_SECONDS;
                     score->userLoss += fabsf(time);
+                    LossAdd(loss, time);
 
                     score->score += (int) ((VERDICT_IGNORE_SECONDS - fabsf(time)) * 1000.0f) / ConfigInfoGetDropSpeed(config);
 
@@ -423,6 +431,7 @@ int LongNoteListKeyPressRender(LongNoteList* list, Score* score, ConfigInfoJSON 
                     score->currentCombo = 0;
                     score->lastElapsed = elapsed;
                     score->lastLossSecond = VERDICT_IGNORE_SECONDS + 9999.0f;
+                    LossAdd(loss, VERDICT_IGNORE_SECONDS - 0.001);
 
                     LongNoteListRemove(list, i);
                     i--;

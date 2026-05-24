@@ -10,8 +10,6 @@
 
 #define SCORE_ENTER_Y 0.01388f // 720: 10px
 
-#define SCORE_SHOW_Y 0.27777f // 720: 200px (screen bottom)
-
 #define SCORE_SCORE_FONT_SIZE    0.02777f // 720: 20px
 #define SCORE_COMBO_FONT_SIZE    0.02777f // 720: 20px
 #define SCORE_MAXCOMBO_FONT_SIZE 0.02777f // 720: 20px
