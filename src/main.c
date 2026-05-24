@@ -44,8 +44,9 @@ int main() {
 
     Score* score = NewScore();
     ShortNoteList* short_notes = NewShortNoteList();
+    LongNoteList* long_notes = NewLongNoteList();
 
-    OpenPatternFile(TextFormat(FILE_STAGE_PATTERN_PATH, stage_id), short_notes);
+    OpenPatternFile(TextFormat(FILE_STAGE_PATTERN_PATH, stage_id), short_notes, long_notes);
     
     Info* info = LoadInfo(preview_path, title, artist);
     Music audio = LoadMusicStream(audio_path);
@@ -78,6 +79,9 @@ int main() {
         ShortNoteListRender(short_notes, score, config, laneCount, elapsed);
         ShortNoteListKeyPressRender(short_notes, score, config, laneCount, elapsed);
 
+        LongNoteListRender(long_notes, score, config, laneCount, elapsed);
+        LongNoteListKeyPressRender(long_notes, score, config, laneCount, elapsed);
+
         VideoProgressRender(player, elapsed);
         InfoRender(info, fonts, laneCount);
         ScoreRender(score, fonts);
@@ -91,6 +95,11 @@ int main() {
     CloseFonts(fonts);
     CloseStageInfo(stage_info);
     UnloadMusicStream(audio);
+
+    CloseShortNoteList(short_notes);
+    CloseLongNoteList(long_notes);
+    CloseScore(score);
+    CloseConfigInfo(config);
 
     CloseAudioDevice();
     CloseWindow();

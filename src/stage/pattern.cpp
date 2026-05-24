@@ -5,13 +5,15 @@
 #include "note/short.h"
 
 enum NoteType {
-    Short
+    Short = 0,
+    Long = 1
 };
 
 struct SharedNote {
     NoteType type;
     int lane;
     float arrival_seconds;
+    float length_seconds = 0.0f;
 };
 
 struct Pattern {
@@ -24,7 +26,8 @@ struct glz::meta<SharedNote> {
     static constexpr auto value = glz::object(
         "t", &T::type,
         "l", &T::lane,
-        "a", &T::arrival_seconds
+        "a", &T::arrival_seconds,
+        "len", &T::length_seconds
     );
 };
 
@@ -36,7 +39,7 @@ struct glz::meta<Pattern> {
     );
 };
 
-int OpenPatternFile(const char* stage_json_path, ShortNoteList* short_note_list) {
+int OpenPatternFile(const char* stage_json_path, ShortNoteList* short_note_list, LongNoteList* long_note_list) {
     auto* pattern = new Pattern();
 
     static std::vector<std::byte> buffer;
@@ -52,10 +55,14 @@ int OpenPatternFile(const char* stage_json_path, ShortNoteList* short_note_list)
             case NoteType::Short:
                 ShortNoteListAdd(short_note_list, note.lane, note.arrival_seconds);
                 break;
+            case NoteType::Long:
+                LongNoteListAdd(long_note_list, note.lane, note.arrival_seconds, note.length_seconds);
+                break;
             default:
                 break;
         }
     }
 
+    delete pattern;
     return 0;
 }

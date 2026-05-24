@@ -12,16 +12,39 @@ def generate_pattern(mp3_path, num_lanes=4):
     arrival_times = librosa.frames_to_time(onset_frames, sr=sr)
 
     shared_notes = []
-    np.random.seed(42)
 
     current_lane = int(np.random.randint(0, num_lanes))
+    active_long_notes = {}
 
-    for time in arrival_times:
-        note = {
-            "t": 0,
-            "l": int(current_lane),
-            "a": round(float(time), 3),
-        }
+    for idx, time in enumerate(arrival_times):
+        active_long_notes = {lane: end_t for lane, end_t in active_long_notes.items() if end_t > time}
+
+        available_lanes = [l for l in range(num_lanes) if l not in active_long_notes]
+        if not available_lanes:
+            continue
+
+        if current_lane not in available_lanes:
+            current_lane = int(np.random.choice(available_lanes))
+
+        is_long = (np.random.rand() < 0.15) and (idx + 2 < len(arrival_times))
+
+        if is_long:
+            duration = arrival_times[idx + 2] - time
+            duration = max(0.4, min(2.0, duration))
+            
+            note = {
+                "t": 1,
+                "l": int(current_lane),
+                "a": round(float(time), 3),
+                "len": round(float(duration), 3),
+            }
+            active_long_notes[current_lane] = time + duration
+        else:
+            note = {
+                "t": 0,
+                "l": int(current_lane),
+                "a": round(float(time), 3),
+            }
         
         shared_notes.append(note)
         rand_choice = np.random.rand()

@@ -236,6 +236,68 @@ int ConfigInfoIsPressed(ConfigInfoJSON* config, int laneCount, int lane) {
     return pressKey;
 }
 
+int ConfigInfoIsReleased(ConfigInfoJSON* config, int laneCount, int lane) {
+    if (!config) {
+        return 0;
+    }
+
+    int pressKey;
+        
+    switch (laneCount) {
+        case 4:
+            if (lane == 0) {
+                pressKey = IsKeyReleased(config->keybind.k4.key1);
+            } else if (lane == 1) {
+                pressKey = IsKeyReleased(config->keybind.k4.key2);
+            } else if (lane == 2) {
+                pressKey = IsKeyReleased(config->keybind.k4.key3);
+            } else if (lane == 3) {
+                pressKey = IsKeyReleased(config->keybind.k4.key4);
+            } else {
+                pressKey = 0;
+            }
+            break;
+        case 5:
+            if (lane == 0) {
+                pressKey = IsKeyReleased(config->keybind.k5.key1);
+            } else if (lane == 1) {
+                pressKey = IsKeyReleased(config->keybind.k5.key2);
+            } else if (lane == 2) {
+                pressKey = IsKeyReleased(config->keybind.k5.key3) || IsKeyReleased(config->keybind.k5.key4);
+            } else if (lane == 3) {
+                pressKey = IsKeyReleased(config->keybind.k5.key5);
+            } else if (lane == 4) {
+                pressKey = IsKeyReleased(config->keybind.k5.key6);
+            } else {
+                pressKey = 0;
+            }
+            break;
+        case 6:
+            if (lane == 0) {
+                pressKey = IsKeyReleased(config->keybind.k6.key1);
+            } else if (lane == 1) {
+                pressKey = IsKeyReleased(config->keybind.k6.key2);
+            } else if (lane == 2) {
+                pressKey = IsKeyReleased(config->keybind.k6.key3);
+            } else if (lane == 3) {
+                pressKey = IsKeyReleased(config->keybind.k6.key4);
+            } else if (lane == 4) {
+                pressKey = IsKeyReleased(config->keybind.k6.key5);
+            } else if (lane == 5) {
+                pressKey = IsKeyReleased(config->keybind.k6.key6);
+            } else {
+                pressKey = 0;
+            }
+            break;
+        default:
+            pressKey = 0;
+            break;
+    }
+
+    return pressKey;
+}
+
+
 float ConfigInfoGetDropSpeed(ConfigInfoJSON* config) {
     if (!config) {
         return 0.5f;

@@ -153,6 +153,7 @@ add_executable(
     src/layout/score.c
     src/layout/note.c
     src/note/short.c
+    src/note/long.c
     src/config/config.cpp
 )
 
