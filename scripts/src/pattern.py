@@ -13,9 +13,15 @@ def generate_pattern(mp3_path, num_lanes=5):
     shared_notes = []
     active_long_notes = {}
     last_lane = -1
+    BUFFER_TIME = 0.15 
 
     for idx, time in enumerate(arrival_times):
-        active_long_notes = {lane: end_t for lane, end_t in active_long_notes.items() if end_t > time}
+        if time < 1.0:
+            continue
+
+        active_long_notes = {
+            lane: end_t for lane, end_t in active_long_notes.items() if end_t + BUFFER_TIME > time
+        }
 
         available_lanes = [l for l in range(num_lanes) if l not in active_long_notes]
         if not available_lanes:
@@ -23,13 +29,13 @@ def generate_pattern(mp3_path, num_lanes=5):
 
         preferred_lanes = [l for l in available_lanes if l != last_lane]
         
-        if preferred_lanes:
-            if np.random.rand() < 0.85 or last_lane not in available_lanes:
-                current_lane = int(np.random.choice(preferred_lanes))
-            else:
-                current_lane = last_lane
+        if preferred_lanes and np.random.rand() < 0.85:
+            current_lane = int(np.random.choice(preferred_lanes))
         else:
-            current_lane = int(np.random.choice(available_lanes))
+            if last_lane in available_lanes:
+                current_lane = last_lane
+            else:
+                current_lane = int(np.random.choice(available_lanes))
 
         is_long = (np.random.rand() < 0.15) and (idx + 2 < len(arrival_times))
 
@@ -43,7 +49,6 @@ def generate_pattern(mp3_path, num_lanes=5):
                 "a": round(float(time), 3),
                 "len": round(float(duration), 3),
             }
-            
             active_long_notes[current_lane] = time + duration
         else:
             note = {
