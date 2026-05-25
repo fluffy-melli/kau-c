@@ -9,6 +9,7 @@
 #include "constant/note.h"
 #include "constant/score.h"
 #include "constant/verdict.h"
+#include "constant/protocol.h"
 
 Score* NewScore() {
     Score* score = malloc(sizeof(Score));
@@ -485,6 +486,581 @@ int ScoreRenderAtLane(Score* score, Fonts* fonts, int laneCount, float elapsed) 
                 SCORE_SHOW_COLOR
             );
         }
+    }
+
+    return 0;
+}
+
+int ScoreAnotherRender(PlayerExchangeState* exchange, int count, int32_t localPlayerUid, Fonts* fonts) {
+    if (!exchange || count <= 0) {
+        return -1;
+    }
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    int imagePadding = screenWidth * INFO_IMAGE_PADDING;
+    int imageSize = screenWidth * INFO_IMAGE_SIZE;
+
+    int infoHeight = imageSize + imagePadding * 2;
+    int infoYPos = (screenHeight - infoHeight) * INFO_CENTER_Y;
+
+    int langCountFontSize = screenWidth * INFO_LANGCOUNT_FONT_SIZE;
+    int langCountSpacing = screenWidth * INFO_LANGCOUNT_SPACING;
+
+    int langCountHeight = langCountFontSize + langCountSpacing * 2;
+    int langCountYPos = infoYPos + imageSize + imagePadding * 2;
+
+    int scoreXPos = screenWidth * SCORE_GAP_X;
+    int scoreYPos = langCountYPos + langCountHeight + screenHeight * SCORE_GAP_Y;
+
+    int scoreWidth = screenWidth * SCORE_WIDTH;
+    int scoreHeight = screenHeight * SCORE_HEIGHT;
+
+    int enterY = screenHeight * SCORE_ENTER_Y;
+
+    int scoreFontSize = screenHeight * SCORE_SCORE_FONT_SIZE;
+    int scoreSpacing = screenHeight * SCORE_SCORE_SPACING;
+
+    int comboFontSize = screenHeight * SCORE_COMBO_FONT_SIZE;
+    int comboSpacing = screenHeight * SCORE_COMBO_SPACING;
+
+    int maxComboFontSize = screenHeight * SCORE_MAXCOMBO_FONT_SIZE;
+    int maxComboSpacing = screenHeight * SCORE_MAXCOMBO_SPACING;
+
+    int accFontSize = screenHeight * SCORE_ACC_FONT_SIZE;
+    int accSpacing = screenHeight * SCORE_ACC_SPACING;
+
+    int tlFontSize = screenHeight * SCORE_TL_FONT_SIZE;
+    int tlSpacing = screenHeight * SCORE_TL_SPACING;
+
+    int drawIndex = 0;
+    int expectedOthers = (count > 0) ? count - 1 : 0;
+    int maxEntries = (count > PROTOCOL_MAX_USER_SIZE) ? PROTOCOL_MAX_USER_SIZE : count;
+    for (int i = 0; i < maxEntries; i++) {
+        PlayerExchangeState* user = &exchange[i];
+
+        if (user->player_uid == 0 || user->player_uid == localPlayerUid) {
+            continue;
+        }
+
+        int anotherYPos = scoreYPos + (scoreHeight + enterY) * (drawIndex + 1);
+        DrawRectangle(
+            scoreXPos,
+            anotherYPos,
+            scoreWidth,
+            scoreHeight,
+            SCORE_BACKGROUND_COLOR
+        );
+
+        int textXPos = scoreXPos + 30;
+        int textXRightPos = scoreXPos + scoreWidth - 30;
+
+        int textYPos = anotherYPos + 20;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Score",
+            textXPos,
+            textYPos,
+            2,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_SCORE_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Score",
+            textXPos,
+            textYPos,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_SCORE_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", user->score),
+            textXRightPos,
+            textYPos,
+            2,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", user->score),
+            textXRightPos,
+            textYPos,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += scoreFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Combo",
+            textXPos,
+            textYPos,
+            2,
+            comboSpacing,
+            comboFontSize,
+            SCORE_COMBO_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Combo",
+            textXPos,
+            textYPos,
+            comboSpacing,
+            comboFontSize,
+            SCORE_COMBO_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", user->combo),
+            textXRightPos,
+            textYPos,
+            2,
+            comboSpacing,
+            comboFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", user->combo),
+            textXRightPos,
+            textYPos,
+            comboSpacing,
+            comboFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += comboFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Max Combo",
+            textXPos,
+            textYPos,
+            2,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_MAXCOMBO_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Max Combo",
+            textXPos,
+            textYPos,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_MAXCOMBO_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", user->max_combo),
+            textXRightPos,
+            textYPos,
+            2,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", user->max_combo),
+            textXRightPos,
+            textYPos,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += maxComboFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Accuracy",
+            textXPos,
+            textYPos,
+            2,
+            accSpacing,
+            accFontSize,
+            SCORE_ACC_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Accuracy",
+            textXPos,
+            textYPos,
+            accSpacing,
+            accFontSize,
+            SCORE_ACC_COLOR
+        );
+
+        float accuracy = 0.0f;
+        if (user->total_loss > 0) {
+            accuracy = ((float)(user->total_loss - user->user_loss) / (float)user->total_loss) * 100.0f;
+            if (accuracy < 0.0f) {
+                accuracy = 0.0f;
+            } else if (accuracy > 100.0f) {
+                accuracy = 100.0f;
+            }
+        }
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%.2f%%", accuracy),
+            textXRightPos,
+            textYPos,
+            2,
+            accSpacing,
+            accFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%.2f%%", accuracy),
+            textXRightPos,
+            textYPos,
+            accSpacing,
+            accFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += accFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Total Loss",
+            textXPos,
+            textYPos,
+            2,
+            tlSpacing,
+            tlFontSize,
+            SCORE_TL_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Total Loss",
+            textXPos,
+            textYPos,
+            tlSpacing,
+            tlFontSize,
+            SCORE_TL_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%dms", user->user_loss),
+            textXRightPos,
+            textYPos,
+            2,
+            tlSpacing,
+            tlFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%dms", user->user_loss),
+            textXRightPos,
+            textYPos,
+            tlSpacing,
+            tlFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        drawIndex++;
+    }
+
+    for (; drawIndex < expectedOthers; drawIndex++) {
+        int anotherYPos = scoreYPos + (scoreHeight + enterY) * drawIndex;
+        DrawRectangle(
+            scoreXPos,
+            anotherYPos,
+            scoreWidth,
+            scoreHeight,
+            SCORE_BACKGROUND_COLOR
+        );
+
+        int textXPos = scoreXPos + 30;
+        int textXRightPos = scoreXPos + scoreWidth - 30;
+
+        int textYPos = anotherYPos + 20;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Score",
+            textXPos,
+            textYPos,
+            2,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_SCORE_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Score",
+            textXPos,
+            textYPos,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_SCORE_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", 0),
+            textXRightPos,
+            textYPos,
+            2,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", 0),
+            textXRightPos,
+            textYPos,
+            scoreSpacing,
+            scoreFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += scoreFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Combo",
+            textXPos,
+            textYPos,
+            2,
+            comboSpacing,
+            comboFontSize,
+            SCORE_COMBO_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Combo",
+            textXPos,
+            textYPos,
+            comboSpacing,
+            comboFontSize,
+            SCORE_COMBO_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", 0),
+            textXRightPos,
+            textYPos,
+            2,
+            comboSpacing,
+            comboFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", 0),
+            textXRightPos,
+            textYPos,
+            comboSpacing,
+            comboFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += comboFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Max Combo",
+            textXPos,
+            textYPos,
+            2,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_MAXCOMBO_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Max Combo",
+            textXPos,
+            textYPos,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_MAXCOMBO_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", 0),
+            textXRightPos,
+            textYPos,
+            2,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%d", 0),
+            textXRightPos,
+            textYPos,
+            maxComboSpacing,
+            maxComboFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += maxComboFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Accuracy",
+            textXPos,
+            textYPos,
+            2,
+            accSpacing,
+            accFontSize,
+            SCORE_ACC_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Accuracy",
+            textXPos,
+            textYPos,
+            accSpacing,
+            accFontSize,
+            SCORE_ACC_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%.2f%%", 0.0f),
+            textXRightPos,
+            textYPos,
+            2,
+            accSpacing,
+            accFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%.2f%%", 0.0f),
+            textXRightPos,
+            textYPos,
+            accSpacing,
+            accFontSize,
+            SCORE_NUMBER_COLOR
+        );
+
+        textYPos += accFontSize + enterY;
+
+        DrawOutline(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Total Loss",
+            textXPos,
+            textYPos,
+            2,
+            tlSpacing,
+            tlFontSize,
+            SCORE_TL_OUTLINE_COLOR
+        );
+
+        DrawString(
+            fonts,
+            FONT_EXTRA_BOLD,
+            "Total Loss",
+            textXPos,
+            textYPos,
+            tlSpacing,
+            tlFontSize,
+            SCORE_TL_COLOR
+        );
+
+        DrawOutlineAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%dms", 0),
+            textXRightPos,
+            textYPos,
+            2,
+            tlSpacing,
+            tlFontSize,
+            SCORE_NUMBER_OUTLINE_COLOR
+        );
+
+        DrawStringAtRight(
+            fonts,
+            FONT_EXTRA_BOLD,
+            TextFormat("%dms", 0),
+            textXRightPos,
+            textYPos,
+            tlSpacing,
+            tlFontSize,
+            SCORE_NUMBER_COLOR
+        );
     }
 
     return 0;

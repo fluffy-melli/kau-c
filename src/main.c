@@ -1,5 +1,6 @@
 #include <raylib.h>
-#include "game/play.h"
+
+#include "game/compete.h"
 #include "constant/file.h"
 
 int main() {
@@ -16,20 +17,22 @@ int main() {
     );
 
     int stage_id = 0;
+    int room_id = 0;
 
-    GameLogic* game = OpenGameLogic(stage_id);
+    //GameLogic* game = OpenGameLogic(stage_id);
+    CompeteLogic* game = OpenCompeteLogic(stage_id, room_id);
 
     SetMusicVolume(game->audio, 0.1f);
 
-    GameLogicPlay(game);
+    //GameLogicPlay(game);
     
     while (!WindowShouldClose()) {
-        GameLogicInputRender(game);
-        GameLogicOutputRender(game, fonts);
+        CompeteLogicInputRender(game);
+        CompeteLogicOutputRender(game, fonts);
     }
 
     CloseFonts(fonts);
-    CloseGameLogic(game);
+    CloseCompeteLogic(game);
 
     CloseAudioDevice();
     CloseWindow();

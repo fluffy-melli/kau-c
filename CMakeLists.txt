@@ -147,9 +147,20 @@ file(
     "src/*.cpp"
 )
 
-add_executable(
-    ${PROJECT_NAME} ${SRC_FILES}
-)
+if(WIN32)
+    add_executable(
+        ${PROJECT_NAME} WIN32 ${SRC_FILES}
+    )
+    
+    target_link_options(
+        ${PROJECT_NAME} PRIVATE
+        "/ENTRY:mainCRTStartup"
+    )
+else()
+    add_executable(
+        ${PROJECT_NAME} ${SRC_FILES}
+    )
+endif()
 
 target_include_directories(
     ${PROJECT_NAME} PRIVATE
@@ -174,6 +185,13 @@ target_link_libraries(
     opencv_videoio
     glaze::glaze
 )
+
+if(WIN32)
+    target_link_libraries(
+        ${PROJECT_NAME} PRIVATE
+        ws2_32
+    )
+endif()
 
 add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD

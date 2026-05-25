@@ -1,0 +1,6 @@
+#pragma once
+
+#define PROTOCOL_SERVER_IP     "127.0.0.1"
+#define PROTOCOL_SERVER_PORT   12700
+#define PROTOCOL_BUFFER_SIZE   1024
+#define PROTOCOL_MAX_USER_SIZE 2
