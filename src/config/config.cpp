@@ -4,6 +4,12 @@
 #include <raylib.h>
 #include <glaze/glaze.hpp>
 
+struct ConfigInfoJSONIn {
+    int pause;
+    int restart;
+    int fullscreen;
+};
+
 struct ConfigInfoJSON4K {
     int key1;
     int key2;
@@ -30,6 +36,7 @@ struct ConfigInfoJSON6K {
 };
 
 struct ConfigInfoJSONKeybind {
+    ConfigInfoJSONIn In;
     ConfigInfoJSON4K k4;
     ConfigInfoJSON5K k5;
     ConfigInfoJSON6K k6;
@@ -43,6 +50,16 @@ struct ConfigInfoJSONNote {
 struct ConfigInfoJSON {
     ConfigInfoJSONKeybind keybind;
     ConfigInfoJSONNote note;
+};
+
+template <>
+struct glz::meta<ConfigInfoJSONIn> {
+    using T = ConfigInfoJSONIn;
+    static constexpr auto value = glz::object(
+        "pause", &T::pause,
+        "restart", &T::restart,
+        "fullscreen", &T::fullscreen
+    );
 };
 
 template <>
@@ -86,6 +103,7 @@ template <>
 struct glz::meta<ConfigInfoJSONKeybind> {
     using T = ConfigInfoJSONKeybind;
     static constexpr auto value = glz::object(
+        "in", &T::In,
         "4k", &T::k4,
         "5k", &T::k5,
         "6k", &T::k6
@@ -311,6 +329,29 @@ int ConfigInfoIsReleased(ConfigInfoJSON* config, int laneCount, int lane) {
     return pressKey;
 }
 
+int ConfigInfoGetPauseKey(ConfigInfoJSON* config) {
+    if (!config) {
+        return 290;
+    }
+
+    return config->keybind.In.pause;
+}
+
+int ConfigInfoGetRestartKey(ConfigInfoJSON* config) {
+    if (!config) {
+        return 294;
+    }
+
+    return config->keybind.In.restart;
+}
+
+int ConfigInfoGetFullscreenKey(ConfigInfoJSON* config) {
+    if (!config) {
+        return 300;
+    }
+
+    return config->keybind.In.fullscreen;
+}
 
 float ConfigInfoGetDropSpeed(ConfigInfoJSON* config) {
     if (!config) {

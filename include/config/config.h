@@ -13,6 +13,10 @@ int ConfigInfoIsDown(ConfigInfoJSON* config, int laneCount, int lane);
 int ConfigInfoIsPressed(ConfigInfoJSON* config, int laneCount, int lane);
 int ConfigInfoIsReleased(ConfigInfoJSON* config, int laneCount, int lane);
 
+int ConfigInfoGetPauseKey(ConfigInfoJSON* config);
+int ConfigInfoGetRestartKey(ConfigInfoJSON* config);
+int ConfigInfoGetFullscreenKey(ConfigInfoJSON* config);
+
 float ConfigInfoGetDropSpeed(ConfigInfoJSON* config);
 float ConfigInfoGetSpawnOffset(ConfigInfoJSON* config);
 

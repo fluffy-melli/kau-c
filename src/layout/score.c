@@ -36,6 +36,19 @@ void CloseScore(Score* score) {
     }
 }
 
+void ScoreReset(Score* score) {
+    score->maxCombo = 0;
+    score->currentCombo = 0;
+
+    score->score = 0;
+
+    score->totalLoss = 0.0f;
+    score->userLoss = 0.0f;
+
+    score->lastElapsed = -999.0f;
+    score->lastLossSecond = 0.0f;
+}
+
 int ScoreRender(Score* score, Fonts* fonts) {
     if (!score) {
         return -1;

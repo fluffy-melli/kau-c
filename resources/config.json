@@ -1,5 +1,10 @@
 {
     "keybind": {
+        "in": {
+            "pause": 290,
+            "restart": 294,
+            "fullscreen": 300
+        },
         "4k": {
             "key1": 65,
             "key2": 83,

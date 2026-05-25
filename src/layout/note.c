@@ -201,6 +201,8 @@ int ShortNoteListKeyPressRender(ShortNoteList* list, Loss* loss, Score* score, C
         LossAdd(loss, time);
 
         score->score += (int) ((VERDICT_IGNORE_SECONDS - fabsf(time)) * 1000.0f) / ConfigInfoGetDropSpeed(config);
+
+        break;
     }
 
     return 0;

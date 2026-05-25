@@ -70,6 +70,19 @@ int LossRemove(Loss* list, int index) {
     return 0;
 }
 
+int LossReset(Loss* list) {
+    if (!list) {
+        return -1;
+    }
+
+    free(list->lossed);
+
+    list->lossed = NULL;
+    list->length = 0;
+
+    return 0;
+}
+
 int LossRender(Loss* list, Fonts* fonts, int laneCount) {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();

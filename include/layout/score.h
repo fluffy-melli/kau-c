@@ -18,5 +18,7 @@ typedef struct {
 Score* NewScore();
 void CloseScore(Score* score);
 
+void ScoreReset(Score* score);
+
 int ScoreRender(Score* score, Fonts* fonts);
 int ScoreRenderAtLane(Score* score, Fonts* fonts, int laneCount, float elapsed);
