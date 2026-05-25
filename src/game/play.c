@@ -179,6 +179,10 @@ void GameLogicRestart(GameLogic* game) {
     StopMusicStream(game->audio);
     SeekMusicStream(game->audio, 0.0f);
 
+    game->isPause = 0;
+    game->isEnd = 0;
+    game->pausedAt = 0.0f;
+    game->totalPausedTime = 0.0f;
     game->started = GetTime();
 
     PlayMusicStream(game->audio);
@@ -197,6 +201,7 @@ int GameLogicInputRender(GameLogic* game) {
 
     if (IsKeyPressed(ConfigInfoGetRestartKey(game->config))) {
         GameLogicRestart(game);
+        return 0;
     }
 
     if (IsKeyPressed(ConfigInfoGetPauseKey(game->config))) {
